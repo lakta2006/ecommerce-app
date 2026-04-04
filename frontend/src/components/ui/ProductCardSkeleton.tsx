@@ -15,13 +15,7 @@ export const ProductCardSkeleton: React.FC = () => {
         {/* Product Name */}
         <Skeleton className="w-full h-4" />
         <Skeleton className="w-2/3 h-4" />
-        
-        {/* Rating */}
-        <div className="flex items-center gap-1">
-          <Skeleton variant="circular" className="w-4 h-4" />
-          <Skeleton className="w-8 h-3" />
-        </div>
-        
+
         {/* Price */}
         <div className="flex items-center gap-2">
           <Skeleton className="w-20 h-5" />

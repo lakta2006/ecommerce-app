@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Package, TrendingUp, Percent, ChevronLeft } from 'lucide-react';
 import { ProductCard } from '@/components/products';
-import { featuredProducts, categories, products } from '@/data/products';
+import { ProductCardSkeleton } from '@/components/ui';
+import { productService, Product, Category } from '@/services/productService';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useToast } from '@/components/ui';
 import { useCartStore } from '@/stores/cartStore';
@@ -12,9 +13,43 @@ export const HomePage: React.FC = () => {
   const { toggleFavorite, favoriteIds } = useFavoritesStore();
   const { addToCart } = useCartStore();
   const { success } = useToast();
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        const [featured, newArrivals, all, cats] = await Promise.all([
+          productService.getFeaturedProducts().catch(() => []),
+          productService.getNewArrivals(4).catch(() => []),
+          productService.getProducts().catch(() => []),
+          productService.getCategories().catch(() => []),
+        ]);
+        setFeaturedProducts(featured);
+        setNewArrivals(newArrivals);
+        setAllProducts(all);
+        setCategories(cats);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+        setFeaturedProducts([]);
+        setNewArrivals([]);
+        setAllProducts([]);
+        setCategories([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (productId: number) => {
-    const product = products.find((p) => p.id === productId);
+    const product = allProducts.find((p) => p.id === productId);
     if (product) {
       addToCart(product);
       success('تم إضافة المنتج إلى السلة', 'تمت الإضافة');
@@ -80,18 +115,30 @@ export const HomePage: React.FC = () => {
             عرض الكل
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {featuredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              isFavorite={favoriteIds.includes(product.id)}
-              onFavoriteToggle={handleFavoriteToggle}
-              onAddToCart={handleAddToCart}
-              onClick={() => handleProductClick(product.id)}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : featuredProducts.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">لا توجد منتجات مميزة بعد</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {featuredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isFavorite={favoriteIds.includes(product.id)}
+                onFavoriteToggle={handleFavoriteToggle}
+                onAddToCart={handleAddToCart}
+                onClick={() => handleProductClick(product.id)}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Categories */}
@@ -127,18 +174,30 @@ export const HomePage: React.FC = () => {
             عرض الكل
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {products.slice(4, 8).map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              isFavorite={favoriteIds.includes(product.id)}
-              onFavoriteToggle={handleFavoriteToggle}
-              onAddToCart={handleAddToCart}
-              onClick={() => handleProductClick(product.id)}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : newArrivals.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">لا توجد منتجات جديدة بعد</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {newArrivals.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isFavorite={favoriteIds.includes(product.id)}
+                onFavoriteToggle={handleFavoriteToggle}
+                onAddToCart={handleAddToCart}
+                onClick={() => handleProductClick(product.id)}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ShoppingCart, Heart, Star, Package, Tag, Truck, Shield } from 'lucide-react';
-import { products } from '@/data/products';
+import { ChevronLeft, ShoppingCart, Heart, Package, Tag, Truck, Shield } from 'lucide-react';
+import { productService, Product } from '@/services/productService';
+import { ProductCardSkeleton } from '@/components/ui';
 import { useCartStore } from '@/stores/cartStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useToast } from '@/components/ui';
@@ -13,8 +14,36 @@ export const ProductDetailsPage: React.FC = () => {
   const { addToCart, isInCart: checkIsInCart } = useCartStore();
   const { toggleFavorite, favoriteIds } = useFavoritesStore();
 
-  const product = products.find((p) => p.id === Number(id));
-  const productIsInCart = product ? checkIsInCart(product.id) : false;
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [productIsInCart, setProductIsInCart] = useState(false);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!id) return;
+      
+      try {
+        setIsLoading(true);
+        const fetchedProduct = await productService.getProduct(Number(id));
+        setProduct(fetchedProduct);
+        setProductIsInCart(checkIsInCart(fetchedProduct.id));
+        
+        // Fetch related products from same category
+        const allProducts = await productService.getProducts();
+        const related = allProducts.filter((p) => p.category === fetchedProduct.category && p.id !== fetchedProduct.id).slice(0, 4);
+        setRelatedProducts(related);
+      } catch (error) {
+        console.error('Failed to fetch product:', error);
+        setProduct(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
   const isFavorite = product ? favoriteIds.includes(product.id) : false;
 
   const handleAddToCart = () => {
@@ -34,6 +63,17 @@ export const ProductDetailsPage: React.FC = () => {
       );
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-8">
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -98,28 +138,6 @@ export const ProductDetailsPage: React.FC = () => {
               {product.name}
             </h1>
 
-            {/* Rating */}
-            {product.rating && (
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`w-5 h-5 ${
-                        star <= Math.floor(product.rating!)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="font-medium text-gray-900">{product.rating}</span>
-                {product.reviews && (
-                  <span className="text-gray-500">({product.reviews} تقييم)</span>
-                )}
-              </div>
-            )}
-
             {/* Price */}
             <div className="mb-6">
               <div className="flex items-center gap-3">
@@ -135,12 +153,14 @@ export const ProductDetailsPage: React.FC = () => {
             </div>
 
             {/* Description */}
-            <div className="mb-6">
-              <p className="text-gray-600 leading-relaxed">
-                منتج عالي الجودة يناسب احتياجاتك. يتميز بتصميم عصري وأداء ممتاز.
-                مثالي للاستخدام اليومي مع ضمان الجودة والرضا التام.
-              </p>
-            </div>
+            {product.description && (
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">الوصف</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
+            )}
 
             {/* Features */}
             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -190,11 +210,13 @@ export const ProductDetailsPage: React.FC = () => {
       {/* Related Products */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 mb-4">منتجات مشابهة</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {products
-            .filter((p) => p.category === product.category && p.id !== product.id)
-            .slice(0, 4)
-            .map((relatedProduct) => (
+        {relatedProducts.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">لا توجد منتجات مشابهة</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {relatedProducts.map((relatedProduct) => (
               <div
                 key={relatedProduct.id}
                 onClick={() => navigate(`/products/${relatedProduct.id}`)}
@@ -217,7 +239,8 @@ export const ProductDetailsPage: React.FC = () => {
                 </div>
               </div>
             ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

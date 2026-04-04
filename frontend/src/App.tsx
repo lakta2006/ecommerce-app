@@ -24,6 +24,7 @@ import {
   StoreDetailsPage,
   CheckoutPage,
 } from './pages/app';
+import { AdminDashboard } from './pages/admin';
 
 function App() {
   const { checkAuth } = useAuthStore();
@@ -153,6 +154,16 @@ function App() {
               <AppShell>
                 <ProfilePage />
               </AppShell>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Route - Separate Layout */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />

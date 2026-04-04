@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Store, Star, MapPin, Package } from 'lucide-react';
+import { Store, MapPin, Package } from 'lucide-react';
 import { stores } from '@/data/stores';
 
 export const StoresPage: React.FC = () => {
@@ -43,28 +43,6 @@ export const StoresPage: React.FC = () => {
               <p className="text-sm text-gray-600 mb-4 line-clamp-2">
                 {store.description}
               </p>
-
-              {/* Rating */}
-              <div className="flex items-center gap-2 mb-3">
-                <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`w-4 h-4 ${
-                        star <= Math.floor(store.rating)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-medium text-gray-900">
-                  {store.rating}
-                </span>
-                <span className="text-xs text-gray-500">
-                  ({store.reviews} تقييم)
-                </span>
-              </div>
 
               {/* Meta Info */}
               <div className="flex items-center justify-between text-sm text-gray-500">

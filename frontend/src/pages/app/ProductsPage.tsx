@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Filter, SlidersHorizontal, X } from 'lucide-react';
 import { ProductCard } from '@/components/products';
 import { ProductCardSkeleton } from '@/components/ui';
-import { products } from '@/data/products';
+import { productService, Product } from '@/services/productService';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useCartStore } from '@/stores/cartStore';
 import { useToast } from '@/components/ui';
@@ -25,13 +25,40 @@ export const ProductsPage: React.FC = () => {
   const { addToCart } = useCartStore();
   const { success } = useToast();
   const [sortBy, setSortBy] = useState('default');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate initial loading
+  // Fetch products from API
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        const categorySlug = searchParams.get('category');
+        let fetchedProducts: Product[];
+        
+        if (categorySlug) {
+          fetchedProducts = await productService.getProductsByCategory(categorySlug);
+        } else {
+          fetchedProducts = await productService.getProducts();
+        }
+        
+        setProducts(fetchedProducts);
+        
+        // Extract unique categories from products
+        const uniqueCategories = Array.from(new Set(fetchedProducts.map((p) => p.category)));
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+        setProducts([]);
+        setCategories([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [searchParams]);
 
   // Get category from URL query param
   const categorySlug = searchParams.get('category');
@@ -62,7 +89,7 @@ export const ProductsPage: React.FC = () => {
     }
 
     return result;
-  }, [selectedCategory, sortBy]);
+  }, [selectedCategory, sortBy, products]);
 
   const handleAddToCart = (productId: number) => {
     const product = products.find((p) => p.id === productId);
@@ -88,9 +115,6 @@ export const ProductsPage: React.FC = () => {
   const clearCategoryFilter = () => {
     navigate('/products');
   };
-
-  // Get unique categories for filter
-  const categories = Array.from(new Set(products.map((p) => p.category)));
 
   return (
     <div className="space-y-6">
@@ -178,7 +202,7 @@ export const ProductsPage: React.FC = () => {
         </div>
       ) : filteredProducts.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">لا توجد منتجات في هذا التصنيف</p>
+          <p className="text-gray-500 text-lg">لا توجد منتجات بعد</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

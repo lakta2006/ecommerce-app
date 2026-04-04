@@ -9,8 +9,6 @@ export interface Product {
   image: string;
   category: string;
   originalPrice?: number;
-  rating?: number;
-  reviews?: number;
 }
 
 interface ProductCardProps {
@@ -84,17 +82,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         >
           {product.name}
         </h3>
-
-        {/* Rating (if available) */}
-        {product.rating && (
-          <div className="flex items-center gap-1 mb-2">
-            <span className="text-yellow-500">★</span>
-            <span className="text-sm font-medium">{product.rating}</span>
-            {product.reviews && (
-              <span className="text-xs text-gray-500">({product.reviews})</span>
-            )}
-          </div>
-        )}
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">

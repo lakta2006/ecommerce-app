@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Store, Star, MapPin, Package, Calendar, ChevronLeft } from 'lucide-react';
-import { stores, getStoreProducts } from '@/data/stores';
+import { Store, MapPin, Package, Calendar, ChevronLeft } from 'lucide-react';
+import { stores } from '@/data/stores';
+import { Product } from '@/services/productService';
 import { ProductCard } from '@/components/products';
+import { ProductCardSkeleton } from '@/components/ui';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useCartStore } from '@/stores/cartStore';
 import { useToast } from '@/components/ui';
@@ -15,7 +17,26 @@ export const StoreDetailsPage: React.FC = () => {
   const { addToCart } = useCartStore();
 
   const store = stores.find((s) => s.slug === slug);
-  const storeProducts = store ? getStoreProducts(store.id) : [];
+  const [storeProducts, setStoreProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStoreProducts = async () => {
+      try {
+        setIsLoading(true);
+        // In real app, this would be an API call to get store products
+        // For now, return empty as we don't have store-product mapping yet
+        setStoreProducts([]);
+      } catch (error) {
+        console.error('Failed to fetch store products:', error);
+        setStoreProducts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStoreProducts();
+  }, [slug]);
 
   const handleAddToCart = (productId: number) => {
     const product = storeProducts.find((p) => p.id === productId);
@@ -86,26 +107,6 @@ export const StoreDetailsPage: React.FC = () => {
               </h1>
               <p className="text-gray-600 max-w-2xl">{store.description}</p>
             </div>
-
-            {/* Rating */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`w-5 h-5 ${
-                        star <= Math.floor(store.rating)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="font-bold text-gray-900">{store.rating}</span>
-                <span className="text-gray-500">({store.reviews} تقييم)</span>
-              </div>
-            </div>
           </div>
 
           {/* Store Meta */}
@@ -161,7 +162,13 @@ export const StoreDetailsPage: React.FC = () => {
           </span>
         </div>
 
-        {storeProducts.length === 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : storeProducts.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
             <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-gray-600">لا توجد منتجات متاحة في هذا المتجر حالياً</p>

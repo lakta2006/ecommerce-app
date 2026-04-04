@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ArrowLeft, Star } from 'lucide-react';
 import { ProductCard } from '@/components/products';
-import { products } from '@/data/products';
+import { productService, Product } from '@/services/productService';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useCartStore } from '@/stores/cartStore';
 import { useToast } from '@/components/ui';
@@ -11,11 +11,30 @@ export const FavoritesPage: React.FC = () => {
   const { favoriteIds, toggleFavorite } = useFavoritesStore();
   const { addToCart } = useCartStore();
   const { success } = useToast();
+  const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([]);
 
-  const favoriteProducts = products.filter((p) => favoriteIds.includes(p.id));
+  // Fetch favorite products from API
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const allProducts = await productService.getProducts();
+        const favorites = allProducts.filter((p) => favoriteIds.includes(p.id));
+        setFavoriteProducts(favorites);
+      } catch (error) {
+        console.error('Failed to fetch favorites:', error);
+        setFavoriteProducts([]);
+      }
+    };
+
+    if (favoriteIds.length > 0) {
+      fetchFavorites();
+    } else {
+      setFavoriteProducts([]);
+    }
+  }, [favoriteIds]);
 
   const handleAddToCart = (productId: number) => {
-    const product = products.find((p) => p.id === productId);
+    const product = favoriteProducts.find((p) => p.id === productId);
     if (product) {
       addToCart(product);
       success('تم إضافة المنتج إلى السلة', 'تمت الإضافة');
