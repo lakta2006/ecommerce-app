@@ -3,6 +3,5 @@
     "allow": [
       "Bash(alembic *)"
     ]
-  },
-  "$version": 3
+  }
 }
