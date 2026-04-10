@@ -80,8 +80,7 @@ export const resetPasswordSchema = z.object({
 
 export const updateProfileSchema = z.object({
   name: z.string().min(2, 'الاسم يجب أن يكون حرفين على الأقل').optional(),
-  phone: z.string().optional().or(z.literal('')),
-  avatar: z.string().url('رابط الصورة غير صحيح').optional().or(z.literal('')),
+  avatar: z.string().optional().or(z.literal('')),
 });
 
 export const changePasswordSchema = z.object({

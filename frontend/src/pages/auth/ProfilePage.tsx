@@ -28,6 +28,7 @@ export const ProfilePage: React.FC = () => {
     handleSubmit: handleProfileSubmit,
     formState: { errors: profileErrors },
     reset: resetProfile,
+    setValue: setProfileValue,
   } = useForm<UpdateProfileData>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
@@ -76,14 +77,17 @@ export const ProfilePage: React.FC = () => {
       }
 
       setSelectedAvatarFile(file);
-      
-      // Create preview
+
+      // Create preview and update form value
       const reader = new FileReader();
       reader.onloadend = () => {
-        setAvatarPreview(reader.result as string);
+        const base64String = reader.result as string;
+        setAvatarPreview(base64String);
+        // Update the form value with the base64 string
+        setProfileValue('avatar', base64String);
       };
       reader.readAsDataURL(file);
-      
+
       toast.success('تم اختيار الصورة بنجاح');
     }
   };
@@ -92,13 +96,26 @@ export const ProfilePage: React.FC = () => {
     setIsProfileLoading(true);
 
     try {
-      // TODO: If there's a selected avatar file, upload it first
-      // For now, we'll send the profile update with the existing/new avatar URL
-      // The backend integration for file upload will be added later
-      const updatedUser = await authService.updateProfile(data);
+      // Prepare the data to send - include avatar if file was selected
+      const updateData: UpdateProfileData = {
+        name: data.name,
+      };
+
+      // If there's a selected avatar file, include its base64 data
+      if (selectedAvatarFile && avatarPreview) {
+        updateData.avatar = avatarPreview;
+      }
+
+      const updatedUser = await authService.updateProfile(updateData);
       updateUser(updatedUser);
       toast.success('تم تحديث الملف الشخصي بنجاح');
-      
+
+      // Reset form with new data
+      resetProfile({
+        name: updatedUser.name,
+        avatar: updatedUser.avatar || '',
+      });
+
       // Reset avatar states after successful update
       if (selectedAvatarFile) {
         setSelectedAvatarFile(null);
@@ -152,11 +169,11 @@ export const ProfilePage: React.FC = () => {
         <Card>
           <div className="flex items-center gap-4 mb-4">
             <div className="relative cursor-pointer group" onClick={handleAvatarClick}>
-              <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {avatarPreview ? (
                   <img src={avatarPreview} alt={user.name} className="w-16 h-16 rounded-full object-cover" />
                 ) : (
-                  <UserIcon className="w-8 h-8 text-primary-600" />
+                  <UserIcon className="w-8 h-8 text-primary-600 dark:text-primary-400" />
                 )}
               </div>
               {/* Camera Icon Overlay */}
@@ -176,17 +193,17 @@ export const ProfilePage: React.FC = () => {
               className="hidden"
             />
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold truncate">{user.name}</h3>
-              <p className="text-gray-500 text-sm truncate">{user.email}</p>
+              <h3 className="text-lg font-semibold truncate dark:text-gray-100">{user.name}</h3>
+              <p className="text-gray-500 dark:text-gray-400 text-sm truncate">{user.email}</p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="inline-block px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded">
+                <span className="inline-block px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded">
                   {user.role === 'customer' && 'زبون'}
                   {user.role === 'store_owner' && 'صاحب متجر'}
                   {user.role === 'mall_owner' && 'صاحب مول'}
                   {user.role === 'admin' && 'مدير'}
                 </span>
                 {user.is_verified && (
-                  <span className="inline-block px-2 py-1 text-xs bg-green-100 text-green-700 rounded">
+                  <span className="inline-block px-2 py-1 text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded">
                     موثق
                   </span>
                 )}
@@ -227,8 +244,8 @@ export const ProfilePage: React.FC = () => {
         {/* Change Password Section */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <Lock className="w-5 h-5" />
+            <h3 className="text-lg font-semibold dark:text-gray-100 flex items-center gap-2">
+              <Lock className="w-5 h-5 dark:text-gray-400" />
               كلمة المرور
             </h3>
             {!showPasswordForm && (
@@ -302,12 +319,12 @@ export const ProfilePage: React.FC = () => {
 
         {/* Danger Zone */}
         <Card>
-          <h3 className="text-lg font-semibold text-red-600 mb-4">منطقة الخطر</h3>
+          <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-4">منطقة الخطر</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">تسجيل الخروج</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-medium dark:text-gray-100">تسجيل الخروج</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   تسجيل الخروج من حسابك الحالي
                 </p>
               </div>

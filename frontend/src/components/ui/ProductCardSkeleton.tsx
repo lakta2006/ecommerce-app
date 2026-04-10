@@ -3,7 +3,7 @@ import { Skeleton } from './Skeleton';
 
 export const ProductCardSkeleton: React.FC = () => {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700 overflow-hidden">
       {/* Image Skeleton */}
       <Skeleton variant="image" className="w-full aspect-square" />
       

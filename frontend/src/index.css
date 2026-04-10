@@ -4,23 +4,34 @@
 
 @layer base {
   * {
+    @apply border-gray-200 dark:border-gray-700;
   }
+
   body {
     @apply bg-white text-gray-900 font-sans;
     font-family: 'IBM Plex Sans Arabic', sans-serif;
   }
-  
+
+  /* Dark mode support - Professional dark theme */
+  .dark body {
+    @apply bg-[#0a0a0a] text-gray-100;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
   /* Safe area for mobile devices */
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
+
   /* Hide scrollbar but keep functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -33,16 +44,19 @@
 
   .btn-secondary {
     @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200;
   }
 
   .input-field {
     @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200;
+    @apply dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:focus:ring-primary-600;
   }
 
   .card {
     @apply bg-white rounded-lg shadow-md p-6;
+    @apply dark:bg-gray-800 dark:shadow-gray-900/50;
   }
-  
+
   /* Touch-friendly button */
   .btn-touch {
     @apply active:scale-95 transition-transform duration-150;
@@ -64,7 +78,7 @@
   .animate-slide-in-right {
     animation: slide-in-right 0.3s ease-out;
   }
-  
+
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -73,11 +87,11 @@
       opacity: 1;
     }
   }
-  
+
   .animate-fade-in {
     animation: fade-in 0.2s ease-out;
   }
-  
+
   @keyframes scale-in {
     from {
       transform: scale(0.95);
@@ -88,7 +102,7 @@
       opacity: 1;
     }
   }
-  
+
   .animate-scale-in {
     animation: scale-in 0.2s ease-out;
   }
@@ -105,9 +119,10 @@
   button, a {
     min-height: 44px;
   }
-  
+
   /* Prevent text size adjustment on orientation change */
   html {
     -webkit-text-size-adjust: 100%;
   }
 }
+

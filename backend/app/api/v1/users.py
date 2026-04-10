@@ -31,14 +31,12 @@ async def update_profile(
     # Update fields if provided
     if user_data.name is not None:
         current_user.name = user_data.name
-    if user_data.phone is not None:
-        current_user.phone = user_data.phone
     if user_data.avatar is not None:
         current_user.avatar = user_data.avatar
-    
+
     db.commit()
     db.refresh(current_user)
-    
+
     return current_user
 
 

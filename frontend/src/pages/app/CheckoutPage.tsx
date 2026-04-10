@@ -31,9 +31,9 @@ export const CheckoutPage: React.FC = () => {
   if (items.length === 0) {
     return (
       <div className="text-center py-12">
-        <CheckCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">السلة فارغة</h2>
-        <p className="text-gray-600 mb-4">أضف منتجات إلى السلة أولاً</p>
+        <CheckCircle className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">السلة فارغة</h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">أضف منتجات إلى السلة أولاً</p>
         <button
           onClick={() => navigate('/products')}
           className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
@@ -103,93 +103,93 @@ export const CheckoutPage: React.FC = () => {
       {/* Back Button */}
       <button
         onClick={() => navigate('/cart')}
-        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+        className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
       >
         <ChevronLeft className="w-5 h-5 rotate-180" />
         <span>العودة للسلة</span>
       </button>
 
-      <h1 className="text-2xl font-bold text-gray-900">إتمام الطلب</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">إتمام الطلب</h1>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Checkout Form */}
         <div className="lg:col-span-2 space-y-6">
           {/* Customer Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-primary-600" />
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+              <User className="w-5 h-5 text-primary-600 dark:text-primary-500" />
               <span>بيانات العميل</span>
             </h2>
 
             <div className="space-y-4">
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   الاسم الكامل *
                 </label>
                 <div className="relative">
-                  <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <input
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
                     placeholder="محمد أحمد محمد"
-                    className="w-full pr-10 pl-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full pr-10 pl-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 </div>
               </div>
 
               {/* Phone Number */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   رقم الهاتف *
                 </label>
                 <div className="relative">
-                  <Phone className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Phone className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="0500000000"
-                    className="w-full pr-10 pl-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full pr-10 pl-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 </div>
               </div>
 
               {/* Address */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   العنوان *
                 </label>
                 <div className="relative">
-                  <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <input
                     type="text"
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
                     placeholder="المدينة، الحي، اسم الشارع"
-                    className="w-full pr-10 pl-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full pr-10 pl-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 </div>
               </div>
 
               {/* Notes (Optional) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   ملاحظات (اختياري)
                 </label>
                 <div className="relative">
-                  <FileText className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
+                  <FileText className="absolute right-3 top-3 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <textarea
                     name="notes"
                     value={formData.notes}
                     onChange={handleInputChange}
                     placeholder="أي ملاحظات إضافية على طلبك..."
                     rows={3}
-                    className="w-full pr-10 pl-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                    className="w-full pr-10 pl-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                   />
                 </div>
               </div>
@@ -197,19 +197,19 @@ export const CheckoutPage: React.FC = () => {
           </div>
 
           {/* Payment Method */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-primary-600" />
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+              <CreditCard className="w-5 h-5 text-primary-600 dark:text-primary-500" />
               <span>طريقة الدفع</span>
             </h2>
 
-            <div className="flex items-center gap-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <Truck className="w-6 h-6 text-green-600" />
+            <div className="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center">
+                <Truck className="w-6 h-6 text-green-600 dark:text-green-500" />
               </div>
               <div>
-                <p className="font-medium text-green-900">الدفع عند الاستلام</p>
-                <p className="text-sm text-green-600">ادفع نقداً عند استلام الطلب</p>
+                <p className="font-medium text-green-900 dark:text-green-300">الدفع عند الاستلام</p>
+                <p className="text-sm text-green-600 dark:text-green-400">ادفع نقداً عند استلام الطلب</p>
               </div>
             </div>
           </div>
@@ -217,14 +217,14 @@ export const CheckoutPage: React.FC = () => {
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 sticky top-20">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">ملخص الطلب</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6 sticky top-20">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">ملخص الطلب</h2>
 
             {/* Items */}
             <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
               {items.map((item) => (
-                <div key={item.id} className="flex items-center gap-3 pb-3 border-b border-gray-100 last:border-0">
-                  <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                <div key={item.id} className="flex items-center gap-3 pb-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                  <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -232,10 +232,10 @@ export const CheckoutPage: React.FC = () => {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                    <p className="text-xs text-gray-500">{item.quantity} × {item.price} ر.س</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{item.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{item.quantity} × {item.price} ر.س</p>
                   </div>
-                  <span className="text-sm font-bold text-gray-900">
+                  <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
                     {item.quantity * item.price} ر.س
                   </span>
                 </div>
@@ -243,18 +243,18 @@ export const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Total */}
-            <div className="border-t border-gray-200 pt-4 space-y-2">
-              <div className="flex items-center justify-between text-gray-600">
+            <div className="border-t border-gray-200 dark:border-gray-600 pt-4 space-y-2">
+              <div className="flex items-center justify-between text-gray-600 dark:text-gray-400">
                 <span>المجموع الفرعي</span>
                 <span>{total} ر.س</span>
               </div>
-              <div className="flex items-center justify-between text-gray-600">
+              <div className="flex items-center justify-between text-gray-600 dark:text-gray-400">
                 <span>الشحن</span>
-                <span className="text-green-600 font-medium">مجاني</span>
+                <span className="text-green-600 dark:text-green-500 font-medium">مجاني</span>
               </div>
-              <div className="border-t border-gray-200 pt-2 flex items-center justify-between">
-                <span className="font-bold text-gray-900">المجموع الكلي</span>
-                <span className="text-xl font-bold text-primary-600">{total} ر.س</span>
+              <div className="border-t border-gray-200 dark:border-gray-600 pt-2 flex items-center justify-between">
+                <span className="font-bold text-gray-900 dark:text-gray-100">المجموع الكلي</span>
+                <span className="text-xl font-bold text-primary-600 dark:text-primary-500">{total} ر.س</span>
               </div>
             </div>
 
@@ -268,7 +268,7 @@ export const CheckoutPage: React.FC = () => {
               <span>{isSubmitting ? 'جاري التحويل...' : 'تأكيد الطلب عبر واتساب'}</span>
             </button>
 
-            <p className="text-xs text-gray-500 text-center mt-3">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
               سيتم تحويلك إلى واتساب لإرسال تفاصيل الطلب
             </p>
           </div>

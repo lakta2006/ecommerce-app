@@ -99,7 +99,7 @@ export const RegisterPage: React.FC = () => {
         <Input
           label="البريد الإلكتروني"
           type="email"
-          placeholder="example@mail.com"
+          placeholder="example@gmail.com"
           icon={<Mail className="w-5 h-5" />}
           error={errors.email}
           {...register('email')}
@@ -118,8 +118,8 @@ export const RegisterPage: React.FC = () => {
           <Input
             label="كلمة المرور"
             type="password"
-            placeholder="••••••••"
-            icon={<Lock className="w-5 h-5" />}
+            placeholder="أدخل كلمة المرور"
+            showPasswordToggle
             error={errors.password}
             {...register('password')}
           />
@@ -133,8 +133,8 @@ export const RegisterPage: React.FC = () => {
         <Input
           label="تأكيد كلمة المرور"
           type="password"
-          placeholder="••••••••"
-          icon={<Lock className="w-5 h-5" />}
+          placeholder="أعد إدخال كلمة المرور"
+          showPasswordToggle
           error={errors.confirmPassword}
           {...register('confirmPassword')}
         />
@@ -150,11 +150,11 @@ export const RegisterPage: React.FC = () => {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           لديك حساب بالفعل؟{' '}
           <Link
             to="/login"
-            className="text-primary-600 font-medium hover:underline"
+            className="text-primary-600 dark:text-primary-500 font-medium hover:underline"
           >
             تسجيل الدخول
           </Link>

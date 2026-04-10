@@ -34,10 +34,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     : 0;
 
   return (
-    <div className="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary-200 transition-all duration-300 ease-out">
+    <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-300 ease-out">
       {/* Image Container */}
       <div
-        className="relative aspect-square overflow-hidden bg-gray-100 cursor-pointer"
+        className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700 cursor-pointer"
         onClick={onClick}
       >
         <img
@@ -59,12 +59,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             e.stopPropagation();
             onFavoriteToggle?.(product.id);
           }}
-          className="absolute top-2 left-2 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center hover:scale-110 hover:bg-white transition-all duration-200"
+          className="absolute top-2 left-2 w-9 h-9 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center hover:scale-110 hover:bg-white dark:hover:bg-gray-700 transition-all duration-200"
         >
           <Heart
             className={cn(
               "w-4 h-4 transition-all duration-200",
-              isFavorite ? "fill-red-500 text-red-500 scale-110" : "text-gray-400 hover:text-red-400"
+              isFavorite ? "fill-red-500 text-red-500 scale-110" : "text-gray-400 dark:text-gray-500 hover:text-red-400"
             )}
           />
         </button>
@@ -73,11 +73,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content */}
       <div className="p-4">
         {/* Category */}
-        <span className="text-xs text-gray-500 mb-1 block">{product.category}</span>
+        <span className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">{product.category}</span>
 
         {/* Product Name */}
         <h3
-          className="font-medium text-gray-900 mb-2 line-clamp-2 min-h-[2.5rem] cursor-pointer hover:text-primary-600 transition-colors duration-200"
+          className="font-medium text-gray-900 dark:text-gray-100 mb-2 line-clamp-2 min-h-[2.5rem] cursor-pointer hover:text-primary-600 dark:hover:text-primary-500 transition-colors duration-200"
           onClick={onClick}
         >
           {product.name}
@@ -85,11 +85,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-lg font-bold text-primary-600">
+          <span className="text-lg font-bold text-primary-600 dark:text-primary-500">
             {product.price} ر.س
           </span>
           {hasDiscount && (
-            <span className="text-sm text-gray-400 line-through">
+            <span className="text-sm text-gray-400 dark:text-gray-500 line-through">
               {product.originalPrice} ر.س
             </span>
           )}

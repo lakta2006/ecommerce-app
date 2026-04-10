@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from slowapi import Limiter
 from app.database import get_db
 from app.models.user import User, UserRole, RefreshToken as RefreshTokenModel, PasswordResetToken
-from app.models.otp import EmailVerificationOTP
+from app.models.otp import EmailVerificationOTP, PasswordResetOTP
 from app.schemas.auth import (
     Token,
     UserCreate,
@@ -295,7 +295,7 @@ async def forgot_password(
     request_data: ForgotPasswordRequest = Body(...),
     db: Annotated[Session, Depends(get_db)] = None
 ):
-    """Request a password reset token."""
+    """Request a password reset OTP code."""
     logger.info(f"Forgot password request for email: {request_data.email}")
     
     user = db.query(User).filter(User.email == request_data.email).first()
@@ -303,39 +303,49 @@ async def forgot_password(
     if not user:
         # Don't reveal if email exists or not
         logger.info(f"No user found with email: {request_data.email}")
-        return {"message": "If the email exists, a password reset link has been sent"}
+        return {"message": "If the email exists, a verification code has been sent"}
 
-    # Invalidate any existing unused reset tokens for this user
-    db.query(PasswordResetToken).filter(
-        PasswordResetToken.user_id == user.id,
-        PasswordResetToken.used == False
+    # Invalidate any existing unused password reset OTPs for this user
+    db.query(PasswordResetOTP).filter(
+        PasswordResetOTP.user_id == user.id,
+        PasswordResetOTP.used == False
     ).update({"used": True})
     db.commit()
 
-    # Generate reset token
-    reset_token = generate_password_reset_token()
+    # Generate OTP code
+    otp_code = PasswordResetOTP.generate_otp_code()
     
-    # Calculate expiration time (10 minutes from now, using naive UTC for DB compatibility)
+    # Calculate expiration time (10 minutes from now)
     expires_at = datetime.utcnow() + timedelta(minutes=settings.PASSWORD_RESET_TOKEN_EXPIRE_MINUTES)
     
-    logger.info(f"Generated reset token for user {user.id}, expires at: {expires_at} UTC")
+    logger.info(f"Generated password reset OTP for user {user.id}, expires at: {expires_at} UTC")
 
-    # Store token in database (store as-is, not hashed, for secure comparison)
-    db_reset_token = PasswordResetToken(
+    # Store OTP in database
+    db_otp = PasswordResetOTP(
         user_id=user.id,
-        token=reset_token,
-        expires_at=expires_at  # Naive UTC datetime
+        email=user.email,
+        otp_code=otp_code,
+        expires_at=expires_at
     )
-    db.add(db_reset_token)
+    db.add(db_otp)
     db.commit()
 
-    # Send email with reset token
+    # Send email with OTP code
+    email_sent = False
     try:
         from app.core.email_service import email_service
-        
-        subject = "إعادة تعيين كلمة المرور - لقطة"
-        reset_link = f"http://localhost:5173/reset-password?token={reset_token}"
-        
+
+        # Log email service configuration for debugging
+        logger.info(f"Email service SMTP host: {email_service.smtp_host}")
+        logger.info(f"Email service SMTP port: {email_service.smtp_port}")
+        logger.info(f"Email service username: {email_service.smtp_username}")
+
+        if not email_service.smtp_host:
+            logger.warning("SMTP not configured - email will be logged only (DEV mode)")
+
+        subject = "رمز إعادة تعيين كلمة المرور - لقطة"
+
+        # HTML email with OTP code
         html_content = f"""
         <!DOCTYPE html>
         <html dir="rtl" lang="ar">
@@ -346,7 +356,8 @@ async def forgot_password(
                 .container {{ max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }}
                 .header {{ text-align: center; margin-bottom: 30px; }}
                 .logo {{ font-size: 28px; font-weight: bold; color: #16a34a; }}
-                .button {{ display: inline-block; padding: 12px 24px; background-color: #16a34a; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0; }}
+                .otp-code {{ background-color: #f0fdf4; border: 2px dashed #16a34a; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0; }}
+                .otp-number {{ font-size: 36px; font-weight: bold; color: #16a34a; letter-spacing: 8px; font-family: monospace; }}
                 .info {{ color: #666; font-size: 14px; line-height: 1.6; }}
                 .footer {{ margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #999; font-size: 12px; }}
             </style>
@@ -358,24 +369,19 @@ async def forgot_password(
                 </div>
                 <h2>مرحباً {user.name}،</h2>
                 <p class="info">
-                    لقد تلقينا طلبًا لإعادة تعيين كلمة المرور الخاصة بك. انقر على الزر أدناه لإعادة تعيين كلمة المرور:
+                    لقد تلقينا طلبًا لإعادة تعيين كلمة المرور الخاصة بك. استخدم رمز التحقق التالي لإعادة تعيين كلمة المرور:
                 </p>
-                <div style="text-align: center;">
-                    <a href="{reset_link}" class="button">إعادة تعيين كلمة المرور</a>
+                <div class="otp-code">
+                    <div class="otp-number">{otp_code}</div>
                 </div>
-                <p class="info">
-                    أو انسخ الرابط التالي والصقه في متصفحك:
-                    <br>
-                    <code style="background-color: #f0f0f0; padding: 4px 8px; border-radius: 4px; word-break: break-all;">{reset_link}</code>
-                </p>
                 <p class="info">
                     <strong>معلومات مهمة:</strong>
                     <br>
-                    • هذا الرابط صالح لمدة {settings.PASSWORD_RESET_TOKEN_EXPIRE_MINUTES} دقيقة
+                    • هذا الرمز صالح لمدة {settings.PASSWORD_RESET_TOKEN_EXPIRE_MINUTES} دقيقة
                     <br>
                     • إذا لم تطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذا البريد
                     <br>
-                    • لمشاركة هذا الرابط مع أي شخص
+                    • لا تشارك هذا الرمز مع أي شخص
                 </p>
                 <div class="footer">
                     <p>هذا بريد إلكتروني تلقائي، يرجى عدم الرد عليه.</p>
@@ -385,22 +391,38 @@ async def forgot_password(
         </body>
         </html>
         """
-        
-        email_sent = email_service.send_email(user.email, subject, html_content)
-        
-        if email_sent:
-            logger.info(f"Password reset email sent to {user.email}")
-        else:
-            logger.warning(f"Failed to send password reset email to {user.email}")
-            
-    except Exception as e:
-        logger.error(f"Error sending password reset email: {e}")
-        # Don't fail the request if email fails - token is still valid
 
-    # TODO: Remove this in production - only for development
+        # Text fallback
+        text_content = f"""
+مرحباً {user.name}،
+
+لقد تلقينا طلبًا لإعادة تعيين كلمة المرور الخاصة بك.
+
+رمز إعادة تعيين كلمة المرور الخاص بك هو: {otp_code}
+
+هذا الرمز صالح لمدة {settings.PASSWORD_RESET_TOKEN_EXPIRE_MINUTES} دقيقة.
+
+إذا لم تطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذا البريد.
+
+© {2026} لقطة. جميع الحقوق محفوظة.
+        """
+
+        logger.info(f"Attempting to send password reset OTP email to: {user.email}")
+        email_sent = email_service.send_email(user.email, subject, html_content, text_content)
+
+        if email_sent:
+            logger.info(f"Password reset OTP email sent successfully to {user.email}")
+        else:
+            logger.error(f"Email service returned False when sending OTP to {user.email}")
+
+    except Exception as e:
+        logger.error(f"Exception while sending password reset OTP email: {type(e).__name__}: {str(e)}")
+        import traceback
+        logger.error(traceback.format_exc())
+        email_sent = False
+
     return {
-        "message": "Password reset token generated",
-        "reset_token": reset_token,
+        "message": "If the email exists, a verification code has been sent",
         "expires_in_minutes": settings.PASSWORD_RESET_TOKEN_EXPIRE_MINUTES
     }
 
@@ -410,7 +432,7 @@ async def reset_password(
     request: ResetPasswordRequest,
     db: Annotated[Session, Depends(get_db)]
 ):
-    """Reset password using a valid token."""
+    """Reset password using OTP verification code."""
     # Validate new password strength
     is_valid, password_error = validate_password_strength(request.new_password)
     if not is_valid:
@@ -419,33 +441,43 @@ async def reset_password(
             detail=password_error
         )
 
-    # Find the reset token in database (stored as-is, not hashed)
-    db_token = db.query(PasswordResetToken).filter(
-        PasswordResetToken.token == request.token,
-        PasswordResetToken.used == False
+    # Find the OTP in database
+    logger.info(f"Looking for OTP with code: {request.token}")
+    db_otp = db.query(PasswordResetOTP).filter(
+        PasswordResetOTP.otp_code == request.token,
+        PasswordResetOTP.used == False
     ).first()
 
-    if not db_token:
+    if not db_otp:
+        logger.warning(f"OTP not found: {request.token}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid or expired reset token"
+            detail="Invalid or expired verification code"
+        )
+    
+    logger.info(f"Found OTP for user {db_otp.user_id}, checking expiration...")
+
+    # Check if OTP is expired
+    if db_otp.is_expired():
+        logger.warning(f"OTP expired: {request.token}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Verification code has expired"
         )
 
-    # Check if token is expired - use naive UTC for comparison
-    # Both expires_at and now are naive UTC datetimes
-    now_utc = datetime.utcnow()
-    expires_at = db_token.expires_at
-    
-    logger.info(f"Token expiration check: expires_at={expires_at}, now_utc={now_utc}, is_expired={expires_at < now_utc}")
-    
-    if expires_at < now_utc:
+    # Increment attempts
+    db_otp.attempts += 1
+
+    # Check max attempts
+    if db_otp.attempts > 5:
+        db.commit()
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Reset token has expired"
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many failed attempts. Please request a new verification code."
         )
 
     # Update user password
-    user = db.query(User).filter(User.id == db_token.user_id).first()
+    user = db.query(User).filter(User.id == db_otp.user_id).first()
     if not user or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -453,7 +485,7 @@ async def reset_password(
         )
 
     user.password_hash = get_password_hash(request.new_password)
-    db_token.used = True
+    db_otp.used = True
 
     # Revoke all refresh tokens for this user (force re-login)
     db.query(RefreshTokenModel).filter(

@@ -14,6 +14,12 @@ import {
 } from './pages/auth';
 import { TestResetPasswordPage } from './pages/auth/TestResetPassword';
 import {
+  SettingsPage,
+  EditProfilePage,
+  SecurityPage,
+  AppearancePage,
+} from './pages/settings';
+import {
   HomePage,
   ProductsPage,
   CartPage,
@@ -153,6 +159,48 @@ function App() {
             <ProtectedRoute>
               <AppShell>
                 <ProfilePage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Settings Routes */}
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <SettingsPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings/profile"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <EditProfilePage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings/security"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <SecurityPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings/appearance"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <AppearancePage />
               </AppShell>
             </ProtectedRoute>
           }

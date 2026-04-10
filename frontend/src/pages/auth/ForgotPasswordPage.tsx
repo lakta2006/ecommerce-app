@@ -71,7 +71,7 @@ export const ForgotPasswordPage: React.FC = () => {
           </Link>
           <Link
             to="/login"
-            className="block text-center text-primary-600 hover:underline"
+            className="block text-center text-primary-600 dark:text-primary-500 hover:underline"
           >
             العودة لتسجيل الدخول
           </Link>
@@ -89,7 +89,7 @@ export const ForgotPasswordPage: React.FC = () => {
         <Input
           label="البريد الإلكتروني"
           type="email"
-          placeholder="example@mail.com"
+          placeholder="example@gmail.com"
           icon={<Mail className="w-5 h-5" />}
           error={errors.email}
           {...register('email')}
@@ -108,7 +108,7 @@ export const ForgotPasswordPage: React.FC = () => {
       <div className="mt-6 text-center">
         <Link
           to="/login"
-          className="text-sm text-primary-600 hover:underline"
+          className="text-sm text-primary-600 dark:text-primary-500 hover:underline"
         >
           العودة لتسجيل الدخول
         </Link>

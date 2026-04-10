@@ -42,7 +42,6 @@ export interface ResetPasswordData {
 
 export interface UpdateProfileData {
   name?: string;
-  phone?: string;
   avatar?: string;
 }
 

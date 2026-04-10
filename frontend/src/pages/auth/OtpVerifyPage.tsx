@@ -161,11 +161,11 @@ export const OtpVerifyPage: React.FC<OtpVerifyPageProps> = ({
     <AuthLayout title={title} subtitle={subtitle}>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
             {type === 'email' ? (
-              <Mail className="w-8 h-8 text-primary-600" />
+              <Mail className="w-8 h-8 text-primary-600 dark:text-primary-400" />
             ) : (
-              <Shield className="w-8 h-8 text-primary-600" />
+              <Shield className="w-8 h-8 text-primary-600 dark:text-primary-400" />
             )}
           </div>
         </div>
@@ -173,8 +173,8 @@ export const OtpVerifyPage: React.FC<OtpVerifyPageProps> = ({
         {/* Show email being verified */}
         {email && (
           <div className="text-center mb-4">
-            <p className="text-sm text-gray-600">جاري التحقق من:</p>
-            <p className="font-medium text-gray-900">{email}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">جاري التحقق من:</p>
+            <p className="font-medium text-gray-900 dark:text-gray-100">{email}</p>
           </div>
         )}
 
@@ -191,7 +191,7 @@ export const OtpVerifyPage: React.FC<OtpVerifyPageProps> = ({
               onChange={(e) => handleOtpChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
               onPaste={handlePaste}
-              className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-500 outline-none transition-all"
+              className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-500 outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               disabled={isLoading}
             />
           ))}
@@ -208,13 +208,13 @@ export const OtpVerifyPage: React.FC<OtpVerifyPageProps> = ({
 
         {/* Resend */}
         <div className="text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             لم يصلك الرمز؟{' '}
             <button
               type="button"
               onClick={handleResend}
               disabled={countdown > 0 || isResending || !email}
-              className="text-primary-600 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-primary-600 dark:text-primary-500 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isResending
                 ? 'جاري الإرسال...'
@@ -229,7 +229,7 @@ export const OtpVerifyPage: React.FC<OtpVerifyPageProps> = ({
       <div className="mt-6 text-center">
         <Link
           to="/login"
-          className="text-sm text-primary-600 hover:underline"
+          className="text-sm text-primary-600 dark:text-primary-500 hover:underline"
         >
           العودة لتسجيل الدخول
         </Link>

@@ -78,7 +78,7 @@ export const HomePage: React.FC = () => {
           <p className="text-primary-100 mb-4">اكتشف أفضل المنتجات بأسعار منافسة</p>
           <Link
             to="/products"
-            className="inline-flex items-center gap-2 bg-white text-primary-600 px-4 py-2 rounded-lg font-medium hover:bg-primary-50 transition-colors"
+            className="inline-flex items-center gap-2 bg-white text-primary-600 px-4 py-2 rounded-lg font-medium hover:bg-primary-50 dark:hover:bg-gray-100 transition-colors"
           >
             <span>تسوق الآن</span>
             <ChevronLeft className="w-4 h-4" />
@@ -91,8 +91,8 @@ export const HomePage: React.FC = () => {
       {/* Featured Products */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900">المنتجات المميزة</h2>
-          <Link to="/products" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">المنتجات المميزة</h2>
+          <Link to="/products" className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium">
             عرض الكل
           </Link>
         </div>
@@ -104,7 +104,7 @@ export const HomePage: React.FC = () => {
           </div>
         ) : featuredProducts.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500">لا توجد منتجات مميزة بعد</p>
+            <p className="text-gray-500 dark:text-gray-400">لا توجد منتجات مميزة بعد</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -125,8 +125,8 @@ export const HomePage: React.FC = () => {
       {/* Categories */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900">التصنيفات</h2>
-          <Link to="/categories" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">التصنيفات</h2>
+          <Link to="/categories" className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium">
             عرض الكل
           </Link>
         </div>
@@ -135,13 +135,13 @@ export const HomePage: React.FC = () => {
             <Link
               key={category.id}
               to={`/products?category=${category.slug}`}
-              className="bg-white rounded-lg shadow-sm p-4 text-center hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 text-center hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow"
             >
-              <div className="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Package className="w-7 h-7 text-primary-600" />
+              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Package className="w-7 h-7 text-primary-600 dark:text-primary-400" />
               </div>
-              <span className="text-sm font-medium text-gray-700">{category.name}</span>
-              <span className="block text-xs text-gray-500 mt-1">{category.productCount} منتج</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{category.name}</span>
+              <span className="block text-xs text-gray-500 dark:text-gray-400 mt-1">{category.productCount} منتج</span>
             </Link>
           ))}
         </div>
@@ -150,8 +150,8 @@ export const HomePage: React.FC = () => {
       {/* New Arrivals */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900">وصل حديثاً</h2>
-          <Link to="/products" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">وصل حديثاً</h2>
+          <Link to="/products" className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium">
             عرض الكل
           </Link>
         </div>
@@ -163,7 +163,7 @@ export const HomePage: React.FC = () => {
           </div>
         ) : newArrivals.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500">لا توجد منتجات جديدة بعد</p>
+            <p className="text-gray-500 dark:text-gray-400">لا توجد منتجات جديدة بعد</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

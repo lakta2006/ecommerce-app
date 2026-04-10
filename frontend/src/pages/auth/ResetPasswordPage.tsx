@@ -151,8 +151,8 @@ export const ResetPasswordPage: React.FC = () => {
           <Input
             label="كلمة المرور الجديدة"
             type="password"
-            placeholder="••••••••"
-            icon={<Lock className="w-5 h-5" />}
+            placeholder="أدخل كلمة المرور الجديدة"
+            showPasswordToggle
             error={errors.new_password}
             {...register('new_password')}
           />
@@ -166,8 +166,8 @@ export const ResetPasswordPage: React.FC = () => {
         <Input
           label="تأكيد كلمة المرور الجديدة"
           type="password"
-          placeholder="••••••••"
-          icon={<Lock className="w-5 h-5" />}
+          placeholder="أعد إدخال كلمة المرور الجديدة"
+          showPasswordToggle
           error={errors.confirm_password}
           {...register('confirm_password')}
         />
@@ -185,7 +185,7 @@ export const ResetPasswordPage: React.FC = () => {
       <div className="mt-6 text-center">
         <Link
           to="/login"
-          className="text-sm text-primary-600 hover:underline"
+          className="text-sm text-primary-600 dark:text-primary-500 hover:underline"
         >
           العودة لتسجيل الدخول
         </Link>

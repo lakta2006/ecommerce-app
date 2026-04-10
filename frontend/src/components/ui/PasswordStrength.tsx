@@ -26,10 +26,10 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({ password, cl
 
   const getStrengthLabel = () => {
     const score = getStrengthScore();
-    if (score <= 2) return { text: 'ضعيفة', color: 'text-red-600', barColor: 'bg-red-500' };
-    if (score <= 3) return { text: 'متوسطة', color: 'text-yellow-600', barColor: 'bg-yellow-500' };
-    if (score <= 4) return { text: 'جيدة', color: 'text-blue-600', barColor: 'bg-blue-500' };
-    return { text: 'قوية', color: 'text-green-600', barColor: 'bg-green-500' };
+    if (score <= 2) return { text: 'ضعيفة', color: 'text-red-600 dark:text-red-400', barColor: 'bg-red-500 dark:bg-red-600' };
+    if (score <= 3) return { text: 'متوسطة', color: 'text-yellow-600 dark:text-yellow-400', barColor: 'bg-yellow-500 dark:bg-yellow-600' };
+    if (score <= 4) return { text: 'جيدة', color: 'text-blue-600 dark:text-blue-400', barColor: 'bg-blue-500 dark:bg-blue-600' };
+    return { text: 'قوية', color: 'text-green-600 dark:text-green-400', barColor: 'bg-green-500 dark:bg-green-600' };
   };
 
   const score = getStrengthScore();
@@ -40,7 +40,7 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({ password, cl
     <div className={cn('space-y-2', className)}>
       {/* Strength bar */}
       <div className="flex items-center gap-2">
-        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <div
             className={cn('h-full transition-all duration-300', strength.barColor)}
             style={{ width: `${percentage}%` }}
@@ -60,7 +60,7 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({ password, cl
               key={index}
               className={cn(
                 'text-xs flex items-center gap-2',
-                met ? 'text-green-600' : 'text-gray-500'
+                met ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
               )}
             >
               <svg

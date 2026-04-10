@@ -122,25 +122,25 @@ export const ProductsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-gray-900">المنتجات</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">المنتجات</h1>
             {selectedCategory && (
               <button
                 onClick={clearCategoryFilter}
-                className="flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-600 rounded-full text-sm font-medium hover:bg-primary-200 transition-colors"
+                className="flex items-center gap-1 px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400 rounded-full text-sm font-medium hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors"
               >
                 <span>{selectedCategory}</span>
                 <X className="w-4 h-4" />
               </button>
             )}
           </div>
-          <p className="text-sm text-gray-600 mt-1">{filteredProducts.length} منتج متاح</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{filteredProducts.length} منتج متاح</p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Sort Dropdown */}
           <div className="relative">
             <select
-              className="appearance-none bg-white border border-gray-200 rounded-lg pl-4 pr-10 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+              className="appearance-none bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg pl-4 pr-10 py-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
@@ -152,7 +152,7 @@ export const ProductsPage: React.FC = () => {
             <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
 
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <Filter className="w-5 h-5" />
             <span className="hidden sm:inline">تصفية</span>
           </button>
@@ -166,7 +166,7 @@ export const ProductsPage: React.FC = () => {
           className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
             !selectedCategory
               ? 'bg-primary-600 text-white'
-              : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+              : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
           الكل
@@ -185,7 +185,7 @@ export const ProductsPage: React.FC = () => {
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               selectedCategory === category
                 ? 'bg-primary-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             {category}

@@ -50,7 +50,7 @@ export const LoginPage: React.FC = () => {
         <Input
           label="البريد الإلكتروني"
           type="email"
-          placeholder="example@mail.com"
+          placeholder="example@gmail.com"
           icon={<Mail className="w-5 h-5" />}
           error={errors.email}
           {...register('email')}
@@ -59,8 +59,8 @@ export const LoginPage: React.FC = () => {
         <Input
           label="كلمة المرور"
           type="password"
-          placeholder="••••••••"
-          icon={<Lock className="w-5 h-5" />}
+          placeholder="أدخل كلمة المرور"
+          showPasswordToggle
           error={errors.password}
           {...register('password')}
         />

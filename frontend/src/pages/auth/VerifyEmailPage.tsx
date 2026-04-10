@@ -67,8 +67,8 @@ export const VerifyEmailPage: React.FC = () => {
         subtitle="يرجى الانتظار"
       >
         <div className="flex flex-col items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4" />
-          <p className="text-gray-600">جاري التحقق من بريدك الإلكتروني...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 dark:border-primary-500 mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">جاري التحقق من بريدك الإلكتروني...</p>
         </div>
       </AuthLayout>
     );
@@ -82,7 +82,7 @@ export const VerifyEmailPage: React.FC = () => {
       >
         <Card className="mb-6">
           <div className="flex items-center justify-center mb-4">
-            <XCircle className="w-16 h-16 text-red-500" />
+            <XCircle className="w-16 h-16 text-red-500 dark:text-red-400" />
           </div>
           <Alert variant="error" className="mb-4">
             {error}
@@ -96,7 +96,7 @@ export const VerifyEmailPage: React.FC = () => {
             </Button>
             <Link
               to="/login"
-              className="block text-center text-primary-600 hover:underline"
+              className="block text-center text-primary-600 dark:text-primary-500 hover:underline"
             >
               العودة لتسجيل الدخول
             </Link>
@@ -113,7 +113,7 @@ export const VerifyEmailPage: React.FC = () => {
     >
       <Card className="mb-6">
         <div className="flex items-center justify-center mb-4">
-          <CheckCircle className="w-16 h-16 text-green-500" />
+          <CheckCircle className="w-16 h-16 text-green-500 dark:text-green-400" />
         </div>
         <Alert variant="success" className="mb-4">
           تم التحقق من بريدك الإلكتروني بنجاح. يمكنك الآن تسجيل الدخول والوصول إلى جميع الميزات.
@@ -129,7 +129,7 @@ export const VerifyEmailPage: React.FC = () => {
         </Button>
         <Link
           to="/"
-          className="block text-center text-primary-600 hover:underline"
+          className="block text-center text-primary-600 dark:text-primary-500 hover:underline"
         >
           العودة للصفحة الرئيسية
         </Link>

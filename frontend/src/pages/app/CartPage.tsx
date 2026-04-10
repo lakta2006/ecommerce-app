@@ -25,30 +25,30 @@ export const CartPage: React.FC = () => {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <ShoppingCart className="w-8 h-8 text-primary-600" />
-          <h1 className="text-2xl font-bold text-gray-900">سلة التسوق</h1>
+          <ShoppingCart className="w-8 h-8 text-primary-600 dark:text-primary-500" />
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">سلة التسوق</h1>
         </div>
 
         {/* Empty Cart */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Package className="w-12 h-12 text-gray-400" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
+          <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Package className="w-12 h-12 text-gray-400 dark:text-gray-500" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">سلتك فارغة</h2>
-          <p className="text-gray-600 mb-8 max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">سلتك فارغة</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
             يبدو أنك لم تضف أي منتجات بعد. ابدأ بالتسوق الآن وأضف منتجاتك المفضلة
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-200"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-200 dark:shadow-primary-900/50"
             >
               <ArrowLeft className="w-5 h-5 rotate-180" />
               <span>تصفح المنتجات</span>
             </Link>
             <Link
               to="/stores"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-lg font-medium hover:border-primary-300 hover:text-primary-600 transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:border-primary-300 dark:hover:border-primary-700 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
             >
               <span>زيارة المتاجر</span>
             </Link>
@@ -57,26 +57,26 @@ export const CartPage: React.FC = () => {
 
         {/* Features */}
         <div className="grid sm:grid-cols-3 gap-4">
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Truck className="w-6 h-6 text-green-600" />
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 text-center">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Truck className="w-6 h-6 text-green-600 dark:text-green-500" />
             </div>
-            <h3 className="font-medium text-gray-900 mb-1">شحن مجاني</h3>
-            <p className="text-sm text-gray-500">على جميع الطلبات</p>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">شحن مجاني</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">على جميع الطلبات</p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <CheckCircle className="w-6 h-6 text-blue-600" />
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 text-center">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-3">
+              <CheckCircle className="w-6 h-6 text-blue-600 dark:text-blue-500" />
             </div>
-            <h3 className="font-medium text-gray-900 mb-1">ضمان الجودة</h3>
-            <p className="text-sm text-gray-500">منتجات أصلية 100%</p>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">ضمان الجودة</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">منتجات أصلية 100%</p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <MessageCircle className="w-6 h-6 text-purple-600" />
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 text-center">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mx-auto mb-3">
+              <MessageCircle className="w-6 h-6 text-purple-600 dark:text-purple-500" />
             </div>
-            <h3 className="font-medium text-gray-900 mb-1">دعم متواصل</h3>
-            <p className="text-sm text-gray-500">خدمة عملاء 24/7</p>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">دعم متواصل</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">خدمة عملاء 24/7</p>
           </div>
         </div>
       </div>
@@ -88,10 +88,10 @@ export const CartPage: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <ShoppingCart className="w-8 h-8 text-primary-600" />
-          <h1 className="text-2xl font-bold text-gray-900">سلة التسوق</h1>
+          <ShoppingCart className="w-8 h-8 text-primary-600 dark:text-primary-500" />
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">سلة التسوق</h1>
         </div>
-        <span className="text-sm text-gray-600">{items.length} منتج</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">{items.length} منتج</span>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -100,12 +100,12 @@ export const CartPage: React.FC = () => {
           {items.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex gap-4"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-4 flex gap-4"
             >
               {/* Image */}
               <Link
                 to={`/products/${item.id}`}
-                className="w-24 h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0"
+                className="w-24 h-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0"
               >
                 <img
                   src={item.image}
@@ -118,26 +118,26 @@ export const CartPage: React.FC = () => {
               <div className="flex-1">
                 <Link
                   to={`/products/${item.id}`}
-                  className="font-medium text-gray-900 hover:text-primary-600 transition-colors line-clamp-2"
+                  className="font-medium text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-500 transition-colors line-clamp-2"
                 >
                   {item.name}
                 </Link>
-                <p className="text-sm text-gray-500 mt-1">{item.category}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{item.category}</p>
                 <div className="flex items-center justify-between mt-3">
                   {/* Quantity Controls */}
-                  <div className="flex items-center border border-gray-200 rounded-lg">
+                  <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg">
                     <button
                       onClick={() => decreaseQuantity(item.id)}
-                      className="p-2 hover:bg-gray-100 transition-colors"
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <span className="px-4 py-2 border-x border-gray-200 font-medium">
+                    <span className="px-4 py-2 border-x border-gray-200 dark:border-gray-600 font-medium">
                       {item.quantity}
                     </span>
                     <button
                       onClick={() => increaseQuantity(item.id)}
-                      className="p-2 hover:bg-gray-100 transition-colors"
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -145,11 +145,11 @@ export const CartPage: React.FC = () => {
 
                   {/* Price */}
                   <div className="text-left">
-                    <span className="text-lg font-bold text-primary-600">
+                    <span className="text-lg font-bold text-primary-600 dark:text-primary-500">
                       {item.price * item.quantity} ر.س
                     </span>
                     {item.originalPrice && item.originalPrice > item.price && (
-                      <p className="text-xs text-gray-400 line-through">
+                      <p className="text-xs text-gray-400 dark:text-gray-500 line-through">
                         {item.originalPrice * item.quantity} ر.س
                       </p>
                     )}
@@ -160,7 +160,7 @@ export const CartPage: React.FC = () => {
               {/* Remove Button */}
               <button
                 onClick={() => handleRemove(item.id)}
-                className="text-red-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors"
+                className="text-red-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-colors"
               >
                 <Trash2 className="w-5 h-5" />
               </button>
@@ -170,21 +170,21 @@ export const CartPage: React.FC = () => {
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 sticky top-20">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">ملخص الطلب</h2>
-            
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6 sticky top-20">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">ملخص الطلب</h2>
+
             <div className="space-y-3 mb-6">
-              <div className="flex items-center justify-between text-gray-600">
+              <div className="flex items-center justify-between text-gray-600 dark:text-gray-400">
                 <span>المجموع الفرعي</span>
                 <span>{total} ر.س</span>
               </div>
-              <div className="flex items-center justify-between text-gray-600">
+              <div className="flex items-center justify-between text-gray-600 dark:text-gray-400">
                 <span>الشحن</span>
-                <span className="text-green-600 font-medium">مجاني</span>
+                <span className="text-green-600 dark:text-green-500 font-medium">مجاني</span>
               </div>
-              <div className="border-t border-gray-200 pt-3 flex items-center justify-between">
-                <span className="font-bold text-gray-900">المجموع الكلي</span>
-                <span className="text-xl font-bold text-primary-600">{total} ر.س</span>
+              <div className="border-t border-gray-200 dark:border-gray-600 pt-3 flex items-center justify-between">
+                <span className="font-bold text-gray-900 dark:text-gray-100">المجموع الكلي</span>
+                <span className="text-xl font-bold text-primary-600 dark:text-primary-500">{total} ر.س</span>
               </div>
             </div>
 
@@ -197,7 +197,7 @@ export const CartPage: React.FC = () => {
 
             <button
               onClick={clearCart}
-              className="w-full py-3 bg-white border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              className="w-full py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               إفراغ السلة
             </button>
@@ -205,7 +205,7 @@ export const CartPage: React.FC = () => {
             {/* Continue Shopping */}
             <Link
               to="/products"
-              className="flex items-center justify-center gap-2 mt-4 text-primary-600 hover:text-primary-700 font-medium"
+              className="flex items-center justify-center gap-2 mt-4 text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium"
             >
               <ArrowLeft className="w-4 h-4 rotate-180" />
               <span>متابعة التسوق</span>

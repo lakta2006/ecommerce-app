@@ -22,8 +22,8 @@ export const CategoriesPage: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Grid className="w-8 h-8 text-primary-600" />
-        <h1 className="text-2xl font-bold text-gray-900">التصنيفات</h1>
+        <Grid className="w-8 h-8 text-primary-600 dark:text-primary-500" />
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">التصنيفات</h1>
       </div>
 
       {/* Categories Grid */}
@@ -32,34 +32,34 @@ export const CategoriesPage: React.FC = () => {
           <div
             key={category.id}
             onClick={() => handleCategoryClick(category.slug)}
-            className="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 text-center hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow cursor-pointer"
           >
-            <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-3`}>
+            <div className={`w-16 h-16 ${category.color} dark:bg-opacity-20 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3`}>
               <category.icon className="w-8 h-8" />
             </div>
-            <h3 className="font-medium text-gray-900 mb-1">{category.name}</h3>
-            <p className="text-sm text-gray-500">{category.count} منتج</p>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">{category.name}</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{category.count} منتج</p>
           </div>
         ))}
       </div>
 
       {/* All Categories List */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">جميع التصنيفات</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">جميع التصنيفات</h2>
         <div className="space-y-2">
           {categories.map((category) => (
             <div
               key={category.id}
               onClick={() => handleCategoryClick(category.slug)}
-              className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+              className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 ${category.color} rounded-lg flex items-center justify-center`}>
+                <div className={`w-10 h-10 ${category.color} dark:bg-opacity-20 dark:bg-gray-700 rounded-lg flex items-center justify-center`}>
                   <category.icon className="w-5 h-5" />
                 </div>
-                <span className="font-medium text-gray-900">{category.name}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-100">{category.name}</span>
               </div>
-              <span className="text-sm text-gray-500">{category.count} منتج</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{category.count} منتج</span>
             </div>
           ))}
         </div>

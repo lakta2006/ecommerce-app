@@ -184,26 +184,45 @@ def test_forgot_password(client, test_user):
     )
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
-    assert "reset_token" in data  # In production, this won't be returned
+    assert "message" in data
+    assert "expires_in_minutes" in data
 
 
-def test_reset_password(client, test_user):
-    """Test password reset."""
-    # First request a reset token
-    forgot_response = client.post(
-        "/api/auth/forgot-password",
-        json={"email": "test@example.com"}
+def test_reset_password(client, test_user, db):
+    """Test password reset with OTP."""
+    from app.models.otp import PasswordResetOTP
+    from datetime import datetime, timedelta
+    
+    # Invalidate existing OTPs
+    db.query(PasswordResetOTP).filter(
+        PasswordResetOTP.user_id == test_user.id,
+        PasswordResetOTP.used == False
+    ).update({"used": True})
+    db.commit()
+    
+    # Create new OTP with expiration 10 minutes in the future
+    otp_code = PasswordResetOTP.generate_otp_code()
+    now = datetime.utcnow()
+    expires_at = now + timedelta(minutes=10)
+    otp = PasswordResetOTP(
+        user_id=test_user.id,
+        email=test_user.email,
+        otp_code=otp_code,
+        expires_at=expires_at
     )
-    reset_token = forgot_response.json()["reset_token"]
-
+    db.add(otp)
+    db.commit()
+    
     # Reset password with strong password
     response = client.post(
         "/api/auth/reset-password",
         json={
-            "token": reset_token,
+            "token": otp_code,
             "new_password": "NewPassword123!"
         }
     )
+    if response.status_code != 200:
+        print(f"\nReset password error: {response.json()}")
     assert response.status_code == status.HTTP_200_OK
 
     # Try logging in with new password
@@ -219,21 +238,42 @@ def test_reset_password(client, test_user):
 
 def test_reset_password_weak_password(client, test_user):
     """Test password reset with weak password."""
-    forgot_response = client.post(
-        "/api/auth/forgot-password",
-        json={"email": "test@example.com"}
-    )
-    reset_token = forgot_response.json()["reset_token"]
-
-    # Try to reset with weak password
-    response = client.post(
-        "/api/auth/reset-password",
-        json={
-            "token": reset_token,
-            "new_password": "weak"
-        }
-    )
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    from app.models.otp import PasswordResetOTP
+    from app.database import SessionLocal
+    from datetime import datetime, timedelta
+    
+    # Create an OTP directly in the database for testing
+    with SessionLocal() as db:
+        # Invalidate existing OTPs
+        db.query(PasswordResetOTP).filter(
+            PasswordResetOTP.user_id == test_user.id,
+            PasswordResetOTP.used == False
+        ).update({"used": True})
+        db.commit()
+        
+        # Create new OTP
+        otp_code = PasswordResetOTP.generate_otp_code()
+        now = datetime.utcnow()
+        expires_at = now + timedelta(minutes=10)
+        otp = PasswordResetOTP(
+            user_id=test_user.id,
+            email=test_user.email,
+            otp_code=otp_code,
+            expires_at=expires_at
+        )
+        db.add(otp)
+        db.commit()
+        
+        # Try to reset with weak password (should fail validation)
+        response = client.post(
+            "/api/auth/reset-password",
+            json={
+                "token": otp_code,
+                "new_password": "weak"
+            }
+        )
+        # Weak password fails validation at Pydantic level (422) or at app level (400)
+        assert response.status_code in [status.HTTP_400_BAD_REQUEST, status.HTTP_422_UNPROCESSABLE_ENTITY]
 
 
 def test_get_profile(client, test_user):

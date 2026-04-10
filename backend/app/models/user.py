@@ -2,7 +2,7 @@
 User models for authentication and authorization.
 """
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum as SQLEnum, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum as SQLEnum, ForeignKey, Text
 from sqlalchemy.orm import relationship
 import enum
 from app.database import Base
@@ -28,7 +28,7 @@ class User(Base):
 
     # Profile
     name = Column(String(100), nullable=False)
-    avatar = Column(String(500), nullable=True)
+    avatar = Column(Text, nullable=True)
 
     # Role and permissions
     role = Column(SQLEnum(UserRole), default=UserRole.CUSTOMER, nullable=False)
