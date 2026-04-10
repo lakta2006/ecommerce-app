@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, TrendingUp, Percent, ChevronLeft } from 'lucide-react';
+import { Package, ChevronLeft } from 'lucide-react';
 import { ProductCard } from '@/components/products';
 import { ProductCardSkeleton } from '@/components/ui';
 import { productService, Product, Category } from '@/services/productService';
@@ -69,12 +69,6 @@ export const HomePage: React.FC = () => {
     navigate(`/products/${productId}`);
   };
 
-  const stats = [
-    { icon: Package, label: 'المنتجات', value: '150+', color: 'bg-blue-100 text-blue-600' },
-    { icon: TrendingUp, label: 'العروض', value: '25', color: 'bg-green-100 text-green-600' },
-    { icon: Percent, label: 'الخصومات', value: '50%', color: 'bg-orange-100 text-orange-600' },
-  ];
-
   return (
     <div className="space-y-8">
       {/* Welcome Banner */}
@@ -92,19 +86,6 @@ export const HomePage: React.FC = () => {
         </div>
         <div className="absolute left-0 top-0 w-32 h-32 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute right-4 bottom-4 w-24 h-24 bg-white/10 rounded-full"></div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-3 gap-4">
-        {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-sm p-4 text-center">
-            <div className={`w-12 h-12 ${stat.color} rounded-full flex items-center justify-center mx-auto mb-2`}>
-              <stat.icon className="w-6 h-6" />
-            </div>
-            <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-            <div className="text-sm text-gray-600">{stat.label}</div>
-          </div>
-        ))}
       </div>
 
       {/* Featured Products */}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '@/stores/authStore';
@@ -7,7 +7,7 @@ import { updateProfileSchema, changePasswordSchema } from '@/utils/validations';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { Input, Button, Alert, Card, PasswordStrength } from '@/components/ui';
 import { useToast } from '@/components/ui';
-import { User as UserIcon, Lock } from 'lucide-react';
+import { User as UserIcon, Lock, Camera } from 'lucide-react';
 import { getAuthErrorMessage } from '@/utils/authErrors';
 import type { UpdateProfileData } from '@/types/auth';
 import type { ChangePasswordFormData } from './types';
@@ -19,6 +19,9 @@ export const ProfilePage: React.FC = () => {
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [passwordValue, setPasswordValue] = useState('');
+  const [avatarPreview, setAvatarPreview] = useState<string>(user?.avatar || '');
+  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register: registerProfile,
@@ -29,7 +32,6 @@ export const ProfilePage: React.FC = () => {
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       name: user?.name || '',
-      phone: user?.phone || '',
       avatar: user?.avatar || '',
     },
   });
@@ -54,13 +56,53 @@ export const ProfilePage: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error('يرجى اختيار ملف صورة صالح', 'ملف غير صالح');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('يجب أن يكون حجم الصورة أقل من 5 ميجابايت', 'ملف كبير جداً');
+        return;
+      }
+
+      setSelectedAvatarFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      
+      toast.success('تم اختيار الصورة بنجاح');
+    }
+  };
+
   const onProfileUpdate = async (data: UpdateProfileData) => {
     setIsProfileLoading(true);
 
     try {
+      // TODO: If there's a selected avatar file, upload it first
+      // For now, we'll send the profile update with the existing/new avatar URL
+      // The backend integration for file upload will be added later
       const updatedUser = await authService.updateProfile(data);
       updateUser(updatedUser);
       toast.success('تم تحديث الملف الشخصي بنجاح');
+      
+      // Reset avatar states after successful update
+      if (selectedAvatarFile) {
+        setSelectedAvatarFile(null);
+      }
     } catch (error: any) {
       const errorMessage = getAuthErrorMessage(error);
       toast.error(errorMessage, 'فشل التحديث');
@@ -109,13 +151,30 @@ export const ProfilePage: React.FC = () => {
         {/* User Info Display */}
         <Card>
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
-              {user.avatar ? (
-                <img src={user.avatar} alt={user.name} className="w-16 h-16 rounded-full object-cover" />
-              ) : (
-                <UserIcon className="w-8 h-8 text-primary-600" />
-              )}
+            <div className="relative cursor-pointer group" onClick={handleAvatarClick}>
+              <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt={user.name} className="w-16 h-16 rounded-full object-cover" />
+                ) : (
+                  <UserIcon className="w-8 h-8 text-primary-600" />
+                )}
+              </div>
+              {/* Camera Icon Overlay */}
+              <div className="absolute bottom-0 right-0 w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center border-2 border-white">
+                <Camera className="w-3 h-3 text-white" />
+              </div>
+              {/* Hover Effect */}
+              <div className="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200" />
             </div>
+            {/* Hidden File Input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleFileChange}
+              className="hidden"
+            />
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-semibold truncate">{user.name}</h3>
               <p className="text-gray-500 text-sm truncate">{user.email}</p>
@@ -144,22 +203,6 @@ export const ProfilePage: React.FC = () => {
               placeholder="الاسم"
               error={profileErrors.name}
               {...registerProfile('name')}
-            />
-
-            <Input
-              label="رقم الهاتف"
-              type="tel"
-              placeholder="+963912345678"
-              error={profileErrors.phone}
-              {...registerProfile('phone')}
-            />
-
-            <Input
-              label="رابط الصورة الشخصية"
-              type="url"
-              placeholder="https://example.com/avatar.jpg"
-              error={profileErrors.avatar}
-              {...registerProfile('avatar')}
             />
 
             <div className="flex gap-2">

@@ -35,7 +35,6 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
   name: z.string().min(2, 'الاسم يجب أن يكون حرفين على الأقل'),
   email: z.string().email('البريد الإلكتروني غير صحيح'),
-  phone: z.string().optional().or(z.literal('')),
   password: z.string().min(8, 'كلمة المرور يجب أن تكون ٨ أحرف على الأقل'),
   confirmPassword: z.string(),
   role: z.enum(['customer', 'store_owner', 'mall_owner', 'admin']).optional(),

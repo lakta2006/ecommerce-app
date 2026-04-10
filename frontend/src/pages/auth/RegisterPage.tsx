@@ -7,7 +7,7 @@ import { registerSchema } from '@/utils/validations';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { Input, Button, Select, PasswordStrength } from '@/components/ui';
 import { useToast } from '@/components/ui';
-import { Mail, Lock, User, Phone, Shield } from 'lucide-react';
+import { Mail, Lock, User, Shield } from 'lucide-react';
 import { getAuthErrorMessage } from '@/utils/authErrors';
 import type { RegisterFormData, UserRole } from './types';
 
@@ -50,7 +50,6 @@ export const RegisterPage: React.FC = () => {
       await registerUser({
         email: data.email,
         name: data.name,
-        phone: data.phone || undefined,
         password: data.password,
         role: data.role as UserRole | undefined,
       });
@@ -104,15 +103,6 @@ export const RegisterPage: React.FC = () => {
           icon={<Mail className="w-5 h-5" />}
           error={errors.email}
           {...register('email')}
-        />
-
-        <Input
-          label="رقم الهاتف (اختياري)"
-          type="tel"
-          placeholder="+963912345678"
-          icon={<Phone className="w-5 h-5" />}
-          error={errors.phone}
-          {...register('phone')}
         />
 
         <Select

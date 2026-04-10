@@ -32,7 +32,7 @@ export const LoginPage: React.FC = () => {
       await login(data.email, data.password);
 
       toast.success('تم تسجيل الدخول بنجاح', 'مرحباً بك');
-      navigate('/profile');
+      navigate('/home');
     } catch (error: any) {
       const errorMessage = getAuthErrorMessage(error);
       toast.error(errorMessage, 'فشل تسجيل الدخول');
