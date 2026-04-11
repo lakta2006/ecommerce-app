@@ -10,6 +10,7 @@ class ProductBase(BaseModel):
     category: str
     description: Optional[str] = None
     original_price: Optional[float] = None
+    store_id: Optional[int] = None
 
 
 class ProductCreate(ProductBase):

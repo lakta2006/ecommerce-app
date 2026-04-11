@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(alembic *)",
+      "Bash(npx *)",
+      "Bash(npm run *)",
+      "Bash(findstr *)",
+      "Bash(python *)",
+      "Bash(del *)"
+    ]
+  },
+  "$version": 3
+}

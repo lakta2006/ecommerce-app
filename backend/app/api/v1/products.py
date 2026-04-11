@@ -1,11 +1,53 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from typing import List
 from app.database import get_db
 from app.models.product import Product
 from app.schemas.product import ProductCreate, ProductResponse
 
 router = APIRouter(prefix="/products", tags=["products"])
+
+
+class CategoryResponse:
+    id: int
+    name: str
+    slug: str
+    productCount: int
+
+
+@router.get("/categories")
+def get_categories(db: Session = Depends(get_db)):
+    """Get all categories with product counts"""
+    # Define the category mapping with Arabic names and slugs
+    category_mapping = {
+        'إلكترونيات': 'electronics',
+        'ملابس': 'clothing',
+        'منزل': 'home',
+        'رياضة': 'sports',
+        'أكسسوارات': 'accessories',
+        'أخرى': 'other',
+    }
+    
+    # Query products grouped by category
+    category_counts = db.query(
+        Product.category,
+        func.count(Product.id).label('count')
+    ).group_by(Product.category).all()
+    
+    # Build the response with real counts
+    categories = []
+    category_dict = {row.category: row.count for row in category_counts}
+    
+    for idx, (name, slug) in enumerate(category_mapping.items(), start=1):
+        categories.append({
+            'id': idx,
+            'name': name,
+            'slug': slug,
+            'productCount': category_dict.get(name, 0)
+        })
+    
+    return categories
 
 
 @router.get("", response_model=List[ProductResponse])
@@ -34,6 +76,7 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
         category=product.category,
         description=product.description,
         original_price=product.original_price,
+        store_id=product.store_id,
     )
     db.add(db_product)
     db.commit()
@@ -47,14 +90,15 @@ def update_product(product_id: int, product: ProductCreate, db: Session = Depend
     db_product = db.query(Product).filter(Product.id == product_id).first()
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
-    
+
     db_product.name = product.name
     db_product.price = product.price
     db_product.image = product.image
     db_product.category = product.category
     db_product.description = product.description
     db_product.original_price = product.original_price
-    
+    db_product.store_id = product.store_id
+
     db.commit()
     db.refresh(db_product)
     return db_product

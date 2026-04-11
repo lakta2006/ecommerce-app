@@ -18,6 +18,8 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 from app.database import Base
 from app.models.user import User, PasswordResetToken, RefreshToken
+from app.models.store import Store
+from app.models.product import Product
 
 target_metadata = Base.metadata
 

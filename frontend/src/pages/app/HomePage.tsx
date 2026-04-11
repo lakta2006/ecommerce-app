@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { ProductCard } from '@/components/products';
 import { ProductCardSkeleton } from '@/components/ui';
-import { productService, Product, Category } from '@/services/productService';
+import { productService, Product } from '@/services/productService';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useToast } from '@/components/ui';
 import { useCartStore } from '@/stores/cartStore';
@@ -16,7 +16,6 @@ export const HomePage: React.FC = () => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch products from API
@@ -24,22 +23,19 @@ export const HomePage: React.FC = () => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const [featured, newArrivals, all, cats] = await Promise.all([
+        const [featured, newArrivals, all] = await Promise.all([
           productService.getFeaturedProducts().catch(() => []),
           productService.getNewArrivals(4).catch(() => []),
           productService.getProducts().catch(() => []),
-          productService.getCategories().catch(() => []),
         ]);
         setFeaturedProducts(featured);
         setNewArrivals(newArrivals);
         setAllProducts(all);
-        setCategories(cats);
       } catch (error) {
         console.error('Failed to fetch products:', error);
         setFeaturedProducts([]);
         setNewArrivals([]);
         setAllProducts([]);
-        setCategories([]);
       } finally {
         setIsLoading(false);
       }
@@ -120,31 +116,6 @@ export const HomePage: React.FC = () => {
             ))}
           </div>
         )}
-      </section>
-
-      {/* Categories */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">التصنيفات</h2>
-          <Link to="/categories" className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium">
-            عرض الكل
-          </Link>
-        </div>
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              to={`/products?category=${category.slug}`}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 text-center hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow"
-            >
-              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Package className="w-7 h-7 text-primary-600 dark:text-primary-400" />
-              </div>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{category.name}</span>
-              <span className="block text-xs text-gray-500 dark:text-gray-400 mt-1">{category.productCount} منتج</span>
-            </Link>
-          ))}
-        </div>
       </section>
 
       {/* New Arrivals */}

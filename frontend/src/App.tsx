@@ -24,13 +24,12 @@ import {
   ProductsPage,
   CartPage,
   FavoritesPage,
-  CategoriesPage,
   ProductDetailsPage,
   StoresPage,
   StoreDetailsPage,
   CheckoutPage,
 } from './pages/app';
-import { AdminDashboard } from './pages/admin';
+import { AdminDashboard, StoreManagement } from './pages/admin';
 
 function App() {
   const { checkAuth } = useAuthStore();
@@ -124,16 +123,6 @@ function App() {
           }
         />
         <Route
-          path="/categories"
-          element={
-            <ProtectedRoute>
-              <AppShell>
-                <CategoriesPage />
-              </AppShell>
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/stores"
           element={
             <ProtectedRoute>
@@ -212,6 +201,16 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Store Management Route */}
+        <Route
+          path="/admin/stores"
+          element={
+            <ProtectedRoute>
+              <StoreManagement />
             </ProtectedRoute>
           }
         />

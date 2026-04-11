@@ -8,6 +8,7 @@ export interface Product {
   category: string;
   originalPrice?: number;
   description?: string;
+  store_id?: number | null;
 }
 
 export interface Category {
@@ -24,6 +25,7 @@ export interface ProductCreateData {
   category: string;
   description?: string;
   original_price?: number;
+  store_id?: number | null;
 }
 
 export const productService = {

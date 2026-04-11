@@ -14,5 +14,9 @@ class Product(Base):
     image = Column(String(500), nullable=False)
     category = Column(String(100), nullable=False)
     original_price = Column(Float, nullable=True)
+    store_id = Column(Integer, ForeignKey('stores.id'), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationship
+    store = relationship("Store", back_populates="products")
