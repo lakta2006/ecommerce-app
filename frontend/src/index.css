@@ -15,9 +15,6 @@
   /* Dark mode support - Professional dark theme */
   .dark body {
     @apply bg-[#0a0a0a] text-gray-100;
-  }
-
-  .dark {
     color-scheme: dark;
   }
 

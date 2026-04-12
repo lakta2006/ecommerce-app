@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Edit, Package, DollarSign, Tag, X, Store, Camera, Image as ImageIcon } from 'lucide-react';
+import { Plus, Trash2, Edit, Package, DollarSign, Tag, X, Store, Camera, Image as ImageIcon, Search, Filter } from 'lucide-react';
 import { productService, Product } from '@/services/productService';
 import { storeService, Store as StoreType } from '@/services/storeService';
 import { useToast, Spinner } from '@/components/ui';
+import { AdminBottomNav } from '@/components/layouts';
 
 interface ProductFormData {
   name: string;
@@ -35,6 +36,12 @@ export const AdminDashboard: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string>('');
   const imageInputRef = useRef<HTMLInputElement>(null);
 
+  // Search and filter states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStore, setSelectedStore] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [categories, setCategories] = useState<string[]>([]);
+
   // Fetch products
   useEffect(() => {
     fetchProducts();
@@ -46,6 +53,10 @@ export const AdminDashboard: React.FC = () => {
       setIsLoading(true);
       const fetchedProducts = await productService.getProducts();
       setProducts(fetchedProducts);
+      
+      // Extract unique categories from products
+      const uniqueCategories = Array.from(new Set(fetchedProducts.map((p) => p.category).filter(Boolean)));
+      setCategories(uniqueCategories);
     } catch (err) {
       console.error('Failed to fetch products:', err);
       showError('فشل في جلب المنتجات');
@@ -63,10 +74,40 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  const getStoreName = (storeId: number | null) => {
+  const getStoreName = (storeId: number | null | undefined) => {
     if (!storeId) return null;
     const store = stores.find((s) => s.id === storeId);
     return store ? store.name : null;
+  };
+
+  // Filter products based on search, store, and category
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+
+    // Filter by search query (product name)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((p) => p.name.toLowerCase().includes(query));
+    }
+
+    // Filter by store
+    if (selectedStore) {
+      result = result.filter((p) => p.store_id?.toString() === selectedStore);
+    }
+
+    // Filter by category
+    if (selectedCategory) {
+      result = result.filter((p) => p.category === selectedCategory);
+    }
+
+    return result;
+  }, [products, searchQuery, selectedStore, selectedCategory]);
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSelectedStore('');
+    setSelectedCategory('');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -175,53 +216,39 @@ export const AdminDashboard: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0a0a0a]">
         <Spinner size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a]">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Package className="w-8 h-8 text-primary-600 dark:text-primary-500" />
+              <Package className="w-8 h-8 text-primary-600 dark:text-primary-500 flex-shrink-0" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">لوحة تحكم المسؤول</h1>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">لوحة تحكم المسؤول</h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">إدارة المنتجات</p>
               </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => navigate('/admin/stores')}
-                className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
-              >
-                <Store className="w-4 h-4" />
-                <span>إدارة المتاجر</span>
-              </button>
-              <button
-                onClick={() => navigate('/home')}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
-              >
-                العودة للمتجر
-              </button>
-              <button
-                onClick={() => setShowForm(true)}
-                className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span>إضافة منتج</span>
-              </button>
-            </div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="px-3 py-2 sm:px-4 sm:py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-1.5 sm:gap-2 min-h-[44px] flex-shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">إضافة منتج</span>
+              <span className="sm:hidden">إضافة</span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
@@ -263,82 +290,274 @@ export const AdminDashboard: React.FC = () => {
         {/* Products Table */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">المنتجات</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                المنتجات
+                {filteredProducts.length !== products.length && (
+                  <span className="mr-2 text-sm font-normal text-gray-500 dark:text-gray-400">
+                    (عرض {filteredProducts.length} من {products.length})
+                  </span>
+                )}
+              </h2>
+              {(searchQuery || selectedStore || selectedCategory) && (
+                <button
+                  onClick={clearFilters}
+                  className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 flex items-center gap-1"
+                >
+                  <X className="w-4 h-4" />
+                  <span>مسح الفلاتر</span>
+                </button>
+              )}
+            </div>
           </div>
-          {products.length === 0 ? (
+
+          {/* Search and Filters */}
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+            <div className="space-y-4">
+              {/* Search Input */}
+              <div className="relative">
+                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="البحث باسم المنتج..."
+                  className="w-full pr-10 pl-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                />
+              </div>
+
+              {/* Filter Dropdowns */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* Store Filter */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                    <Filter className="w-3 h-3 inline-block ml-1" />
+                    تصفية بالمتجر
+                  </label>
+                  <select
+                    value={selectedStore}
+                    onChange={(e) => setSelectedStore(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  >
+                    <option value="">جميع المتاجر</option>
+                    {stores.map((store) => (
+                      <option key={store.id} value={store.id.toString()}>
+                        {store.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Category Filter */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                    <Tag className="w-3 h-3 inline-block ml-1" />
+                    تصفية بالتصنيف
+                  </label>
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  >
+                    <option value="">جميع التصنيفات</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Active Filters Display */}
+              {(searchQuery || selectedStore || selectedCategory) && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">الفلاتر النشطة:</span>
+                  {searchQuery && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-full text-xs font-medium">
+                      البحث: {searchQuery}
+                      <button onClick={() => setSearchQuery('')} className="hover:text-primary-900 dark:hover:text-primary-300">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  )}
+                  {selectedStore && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs font-medium">
+                      المتجر: {getStoreName(parseInt(selectedStore))}
+                      <button onClick={() => setSelectedStore('')} className="hover:text-green-900 dark:hover:text-green-300">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  )}
+                  {selectedCategory && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-full text-xs font-medium">
+                      التصنيف: {selectedCategory}
+                      <button onClick={() => setSelectedCategory('')} className="hover:text-purple-900 dark:hover:text-purple-300">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {filteredProducts.length === 0 ? (
             <div className="px-6 py-12 text-center">
               <Package className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-500 dark:text-gray-400">لا توجد منتجات بعد</p>
-              <button
-                onClick={() => setShowForm(true)}
-                className="mt-4 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                إضافة أول منتج
-              </button>
+              {products.length > 0 ? (
+                <>
+                  <p className="text-gray-500 dark:text-gray-400 mb-2">لا توجد منتجات مطابقة للفلاتر</p>
+                  <button
+                    onClick={clearFilters}
+                    className="mt-4 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                  >
+                    مسح الفلاتر
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="text-gray-500 dark:text-gray-400">لا توجد منتجات بعد</p>
+                  <button
+                    onClick={() => setShowForm(true)}
+                    className="mt-4 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                  >
+                    إضافة أول منتج
+                  </button>
+                </>
+              )}
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-700">
-                  <tr>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      المنتج
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      التصنيف
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      السعر
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      الإجراءات
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {products.map((product) => (
-                    <tr key={product.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <img
-                              className="h-10 w-10 rounded-lg object-cover"
-                              src={product.image}
-                              alt={product.name}
-                            />
-                          </div>
-                          <div className="mr-4">
-                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{product.name}</div>
-                          </div>
+            <>
+              {/* Mobile Card View */}
+              <div className="sm:hidden space-y-3 p-4">
+                {filteredProducts.map((product) => (
+                  <div key={product.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+                    <div className="flex items-start gap-3">
+                      <img
+                        className="h-16 w-16 rounded-lg object-cover flex-shrink-0"
+                        src={product.image}
+                        alt={product.name}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{product.name}</h3>
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {getStoreName(product.store_id) ? (
+                            <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                              {getStoreName(product.store_id)}
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 text-xs text-gray-400 dark:text-gray-500">بدون متجر</span>
+                          )}
+                          {product.category && (
+                            <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
+                              {product.category}
+                            </span>
+                          )}
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
-                          {product.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                        {product.price} ر.س
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleEdit(product)}
-                          className="text-primary-600 dark:text-primary-500 hover:text-primary-900 dark:hover:text-primary-400 ml-3"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product.id)}
-                          className="text-red-600 dark:text-red-500 hover:text-red-900 dark:hover:text-red-400"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
+                        <p className="mt-2 text-base font-bold text-gray-900 dark:text-gray-100">{product.price} ر.س</p>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+                      <button
+                        onClick={() => handleEdit(product)}
+                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-primary-600 dark:text-primary-500 bg-primary-50 dark:bg-primary-900/20 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors min-h-[44px]"
+                      >
+                        <Edit className="w-4 h-4" />
+                        <span>تعديل</span>
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-500 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors min-h-[44px]"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        <span>حذف</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        المنتج
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        المتجر
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        التصنيف
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        السعر
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        الإجراءات
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {filteredProducts.map((product) => (
+                      <tr key={product.id}>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-10 w-10">
+                              <img
+                                className="h-10 w-10 rounded-lg object-cover"
+                                src={product.image}
+                                alt={product.name}
+                              />
+                            </div>
+                            <div className="mr-4">
+                              <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{product.name}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          {getStoreName(product.store_id) ? (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                              {getStoreName(product.store_id)}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-gray-400 dark:text-gray-500">بدون متجر</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
+                            {product.category}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                          {product.price} ر.س
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleEdit(product)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-primary-600 dark:text-primary-500 hover:text-primary-900 dark:hover:text-primary-400 bg-primary-50 dark:bg-primary-900/20 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors min-h-[44px]"
+                            >
+                              <Edit className="w-4 h-4" />
+                              <span className="hidden md:inline">تعديل</span>
+                            </button>
+                            <button
+                              onClick={() => handleDelete(product.id)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-red-600 dark:text-red-500 hover:text-red-900 dark:hover:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors min-h-[44px]"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              <span className="hidden md:inline">حذف</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -415,7 +634,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Price */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     السعر (ر.س) <span className="text-red-500">*</span>
@@ -509,25 +728,28 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
-                >
-                  {editingProduct ? 'تحديث المنتج' : 'إضافة المنتج'}
-                </button>
+              <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4">
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
+                  className="flex-1 px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium min-h-[44px]"
                 >
                   إلغاء
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium min-h-[44px]"
+                >
+                  {editingProduct ? 'تحديث المنتج' : 'إضافة المنتج'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Bottom Navigation */}
+      <AdminBottomNav />
     </div>
   );
 };

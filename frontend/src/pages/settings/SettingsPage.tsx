@@ -10,6 +10,8 @@ import {
   Moon,
   LogOut,
   ChevronLeft,
+  FileText,
+  Shield,
 } from 'lucide-react';
 import { useToast } from '@/components/ui';
 
@@ -57,6 +59,18 @@ export const SettingsPage: React.FC = () => {
       title: 'المظهر',
       subtitle: 'الوضع الفاتح والداكن',
       onClick: () => navigate('/settings/appearance'),
+    },
+    {
+      icon: <FileText className="w-5 h-5" />,
+      title: 'شروط الاستخدام',
+      subtitle: 'القواعد والأحكام',
+      onClick: () => navigate('/terms'),
+    },
+    {
+      icon: <Shield className="w-5 h-5" />,
+      title: 'سياسة الخصوصية',
+      subtitle: 'كيف نحمي بياناتك',
+      onClick: () => navigate('/privacy'),
     },
   ];
 

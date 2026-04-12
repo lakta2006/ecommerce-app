@@ -17,8 +17,14 @@ class ProductCreate(ProductBase):
     pass
 
 
-class ProductUpdate(ProductBase):
-    pass
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    price: Optional[float] = None
+    image: Optional[str] = None
+    category: Optional[str] = None
+    description: Optional[str] = None
+    original_price: Optional[float] = None
+    store_id: Optional[int] = None
 
 
 class ProductResponse(ProductBase):

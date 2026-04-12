@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Filter, SlidersHorizontal, X } from 'lucide-react';
+import { SlidersHorizontal, X, Search } from 'lucide-react';
 import { ProductCard } from '@/components/products';
 import { ProductCardSkeleton } from '@/components/ui';
 import { productService, Product } from '@/services/productService';
@@ -28,23 +28,33 @@ export const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
 
   // Fetch products from API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const categorySlug = searchParams.get('category');
+        const categoryParam = searchParams.get('category');
+        const storeId = searchParams.get('store_id');
+        const search = searchParams.get('search');
         let fetchedProducts: Product[];
-        
-        if (categorySlug) {
-          fetchedProducts = await productService.getProductsByCategory(categorySlug);
+
+        if (search) {
+          setSearchQuery(search);
+          fetchedProducts = await productService.getProducts(search);
+        } else if (storeId) {
+          fetchedProducts = await productService.getProductsByStore(parseInt(storeId));
+        } else if (categoryParam) {
+          // Pass the category param as-is (could be Arabic name or English slug)
+          // The backend will filter by exact match
+          fetchedProducts = await productService.getProductsByCategory(categoryParam);
         } else {
           fetchedProducts = await productService.getProducts();
         }
-        
+
         setProducts(fetchedProducts);
-        
+
         // Extract unique categories from products
         const uniqueCategories = Array.from(new Set(fetchedProducts.map((p) => p.category)));
         setCategories(uniqueCategories);
@@ -61,14 +71,26 @@ export const ProductsPage: React.FC = () => {
   }, [searchParams]);
 
   // Get category from URL query param
-  const categorySlug = searchParams.get('category');
-  const selectedCategory = categorySlug ? categorySlugMap[categorySlug] : null;
+  const categoryParam = searchParams.get('category');
+  // Check if it's a slug (English) or actual category name (Arabic)
+  const isSlug = categoryParam && categorySlugMap[categoryParam];
+  const selectedCategory = isSlug ? categorySlugMap[categoryParam!] : categoryParam;
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // Filter by category
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.description?.toLowerCase().includes(query)
+      );
+    }
+
+    // Filter by category - match against the Arabic category name
     if (selectedCategory) {
       result = result.filter((p) => p.category === selectedCategory);
     }
@@ -89,7 +111,7 @@ export const ProductsPage: React.FC = () => {
     }
 
     return result;
-  }, [selectedCategory, sortBy, products]);
+  }, [selectedCategory, sortBy, products, searchQuery]);
 
   const handleAddToCart = (productId: number) => {
     const product = products.find((p) => p.id === productId);
@@ -118,6 +140,29 @@ export const ProductsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Search Bar */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+        <form onSubmit={(e) => { e.preventDefault(); }} className="relative max-w-2xl">
+          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="البحث عن المنتجات..."
+            className="w-full pr-10 pl-10 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute left-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
+            >
+              <X className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+            </button>
+          )}
+        </form>
+      </div>
+
       {/* Header with Filters */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -151,11 +196,6 @@ export const ProductsPage: React.FC = () => {
             </select>
             <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
-
-          <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-            <Filter className="w-5 h-5" />
-            <span className="hidden sm:inline">تصفية</span>
-          </button>
         </div>
       </div>
 
@@ -175,12 +215,9 @@ export const ProductsPage: React.FC = () => {
           <button
             key={category}
             onClick={() => {
-              const slug = Object.keys(categorySlugMap).find(
-                (key) => categorySlugMap[key] === category
-              );
-              if (slug) {
-                navigate(`/products?category=${slug}`);
-              }
+              // Navigate with the actual Arabic category name
+              // The backend filters by the exact category value stored in DB
+              navigate(`/products?category=${encodeURIComponent(category)}`);
             }}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               selectedCategory === category

@@ -6,3 +6,5 @@ export { ProductDetailsPage } from './ProductDetailsPage';
 export { StoresPage } from './StoresPage';
 export { StoreDetailsPage } from './StoreDetailsPage';
 export { CheckoutPage } from './CheckoutPage';
+export { TermsPage } from './TermsPage';
+export { PrivacyPage } from './PrivacyPage';

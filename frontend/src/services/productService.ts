@@ -29,15 +29,22 @@ export interface ProductCreateData {
 }
 
 export const productService = {
-  // Get all products
-  getProducts: async (): Promise<Product[]> => {
-    const response = await apiClient.get('/api/products');
+  // Get all products with optional search
+  getProducts: async (search?: string): Promise<Product[]> => {
+    const url = search ? `/api/products?search=${encodeURIComponent(search)}` : '/api/products';
+    const response = await apiClient.get(url);
     return response.data;
   },
 
   // Get products by category
   getProductsByCategory: async (categorySlug: string): Promise<Product[]> => {
     const response = await apiClient.get(`/api/products?category=${categorySlug}`);
+    return response.data;
+  },
+
+  // Get products by store ID
+  getProductsByStore: async (storeId: number): Promise<Product[]> => {
+    const response = await apiClient.get(`/api/products?store_id=${storeId}`);
     return response.data;
   },
 

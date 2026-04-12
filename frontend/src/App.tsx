@@ -28,8 +28,11 @@ import {
   StoresPage,
   StoreDetailsPage,
   CheckoutPage,
+  TermsPage,
+  PrivacyPage,
 } from './pages/app';
 import { AdminDashboard, StoreManagement } from './pages/admin';
+import { AdminStoreDetail } from './pages/admin/AdminStoreDetail';
 
 function App() {
   const { checkAuth } = useAuthStore();
@@ -195,6 +198,10 @@ function App() {
           }
         />
 
+        {/* Public Legal Pages */}
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+
         {/* Admin Route - Separate Layout */}
         <Route
           path="/admin"
@@ -211,6 +218,16 @@ function App() {
           element={
             <ProtectedRoute>
               <StoreManagement />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Store Detail Route */}
+        <Route
+          path="/admin/stores/:storeId"
+          element={
+            <ProtectedRoute>
+              <AdminStoreDetail />
             </ProtectedRoute>
           }
         />

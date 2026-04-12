@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from typing import List
+from typing import List, Optional
 from app.database import get_db
 from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductResponse
+from app.schemas.product import ProductCreate, ProductUpdate, ProductResponse
 
 router = APIRouter(prefix="/products", tags=["products"])
 
@@ -51,9 +51,30 @@ def get_categories(db: Session = Depends(get_db)):
 
 
 @router.get("", response_model=List[ProductResponse])
-def get_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """Get all products"""
-    products = db.query(Product).offset(skip).limit(limit).all()
+def get_products(
+    skip: int = 0,
+    limit: int = 100,
+    store_id: Optional[int] = Query(None),
+    category: Optional[str] = Query(None),
+    search: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    """Get all products with optional store, category, and search filters"""
+    query = db.query(Product)
+
+    # Filter by store_id if provided
+    if store_id:
+        query = query.filter(Product.store_id == store_id)
+
+    # Filter by category if provided
+    if category:
+        query = query.filter(Product.category == category)
+
+    # Search by product name if provided
+    if search:
+        query = query.filter(Product.name.ilike(f"%{search}%"))
+
+    products = query.offset(skip).limit(limit).all()
     return products
 
 
@@ -85,19 +106,16 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{product_id}", response_model=ProductResponse)
-def update_product(product_id: int, product: ProductCreate, db: Session = Depends(get_db)):
+def update_product(product_id: int, product: ProductUpdate, db: Session = Depends(get_db)):
     """Update a product"""
     db_product = db.query(Product).filter(Product.id == product_id).first()
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
 
-    db_product.name = product.name
-    db_product.price = product.price
-    db_product.image = product.image
-    db_product.category = product.category
-    db_product.description = product.description
-    db_product.original_price = product.original_price
-    db_product.store_id = product.store_id
+    update_data = product.model_dump(exclude_unset=True)
+    
+    for key, value in update_data.items():
+        setattr(db_product, key, value)
 
     db.commit()
     db.refresh(db_product)
