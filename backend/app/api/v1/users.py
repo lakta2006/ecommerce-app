@@ -33,6 +33,8 @@ async def update_profile(
         current_user.name = user_data.name
     if user_data.avatar is not None:
         current_user.avatar = user_data.avatar
+    if user_data.role is not None:
+        current_user.role = user_data.role.value
 
     db.commit()
     db.refresh(current_user)

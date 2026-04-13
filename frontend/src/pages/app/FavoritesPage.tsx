@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, ArrowLeft, Star } from 'lucide-react';
+import { Heart, ArrowLeft } from 'lucide-react';
 import { ProductCard } from '@/components/products';
 import { productService, Product } from '@/services/productService';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useCartStore } from '@/stores/cartStore';
 import { useToast } from '@/components/ui';
+import { StickyHeader } from '@/components/layouts';
 
 export const FavoritesPage: React.FC = () => {
   const { favoriteIds, toggleFavorite } = useFavoritesStore();
@@ -47,15 +48,15 @@ export const FavoritesPage: React.FC = () => {
 
   if (favoriteProducts.length === 0) {
     return (
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <Heart className="w-8 h-8 text-red-500" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">المفضلة</h1>
-        </div>
+      <div>
+        {/* Sticky Header */}
+        <StickyHeader
+          title="المفضلة"
+          icon={<Heart className="w-5 h-5 text-red-500" />}
+        />
 
         {/* Empty State */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
+        <div className="px-4 py-12 text-center">
           <div className="w-24 h-24 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Heart className="w-12 h-12 text-red-300 dark:text-red-800" />
           </div>
@@ -71,69 +72,36 @@ export const FavoritesPage: React.FC = () => {
             <span>تصفح المنتجات</span>
           </Link>
         </div>
-
-        {/* Tips */}
-        <div className="bg-gradient-to-l from-primary-50 to-red-50 dark:from-primary-900/20 dark:to-red-900/20 rounded-xl p-6">
-          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <Star className="w-5 h-5 text-primary-600 dark:text-primary-500" />
-            <span>لماذا تستخدم المفضلة؟</span>
-          </h3>
-          <div className="grid sm:grid-cols-3 gap-4">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-white dark:bg-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary-600 dark:text-primary-500 font-bold text-sm">1</span>
-              </div>
-              <div>
-                <p className="font-medium text-gray-900 dark:text-gray-100">وصول سريع</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">لمنتجاتك المفضلة</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-white dark:bg-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary-600 dark:text-primary-500 font-bold text-sm">2</span>
-              </div>
-              <div>
-                <p className="font-medium text-gray-900 dark:text-gray-100">تتبع الأسعار</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">للعروض والخصومات</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-white dark:bg-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary-600 dark:text-primary-500 font-bold text-sm">3</span>
-              </div>
-              <div>
-                <p className="font-medium text-gray-900 dark:text-gray-100">قائمة منظمة</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">لما تريد شراءه</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Heart className="w-8 h-8 text-red-500" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">المفضلة</h1>
-        </div>
-        <span className="text-sm text-gray-600 dark:text-gray-400">{favoriteProducts.length} منتج</span>
-      </div>
+    <div>
+      {/* Sticky Header */}
+      <StickyHeader
+        title="المفضلة"
+        icon={<Heart className="w-5 h-5 text-red-500" />}
+      />
 
-      {/* Products Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {favoriteProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            isFavorite={true}
-            onFavoriteToggle={handleFavoriteToggle}
-            onAddToCart={handleAddToCart}
-          />
-        ))}
+      {/* Content */}
+      <div className="px-4 py-4">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-sm text-gray-600 dark:text-gray-400">{favoriteProducts.length} منتج</span>
+        </div>
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {favoriteProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              isFavorite={true}
+              onFavoriteToggle={handleFavoriteToggle}
+              onAddToCart={handleAddToCart}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

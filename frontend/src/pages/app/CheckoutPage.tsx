@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, MapPin, Phone, User, FileText, Truck, ChevronLeft, CheckCircle, MessageCircle } from 'lucide-react';
+import { MapPin, Phone, User, FileText, ChevronLeft, CheckCircle, MessageCircle } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useToast } from '@/components/ui';
 import { generateWhatsAppLink } from '@/utils/whatsapp';
@@ -26,6 +26,12 @@ export const CheckoutPage: React.FC = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   // Redirect to cart if empty
   if (items.length === 0) {
@@ -134,7 +140,7 @@ export const CheckoutPage: React.FC = () => {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    placeholder="محمد أحمد محمد"
+                    placeholder="الاسم الكامل"
                     className="w-full pr-10 pl-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 </div>
@@ -152,7 +158,7 @@ export const CheckoutPage: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="0500000000"
+                    placeholder="0900000000"
                     className="w-full pr-10 pl-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 </div>
@@ -192,24 +198,6 @@ export const CheckoutPage: React.FC = () => {
                     className="w-full pr-10 pl-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                   />
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Payment Method */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-primary-600 dark:text-primary-500" />
-              <span>طريقة الدفع</span>
-            </h2>
-
-            <div className="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center">
-                <Truck className="w-6 h-6 text-green-600 dark:text-green-500" />
-              </div>
-              <div>
-                <p className="font-medium text-green-900 dark:text-green-300">الدفع عند الاستلام</p>
-                <p className="text-sm text-green-600 dark:text-green-400">ادفع نقداً عند استلام الطلب</p>
               </div>
             </div>
           </div>
@@ -270,6 +258,9 @@ export const CheckoutPage: React.FC = () => {
 
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
               سيتم تحويلك إلى واتساب لإرسال تفاصيل الطلب
+            </p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-2">
+              ادفع نقداً عند الاستلام
             </p>
           </div>
         </div>

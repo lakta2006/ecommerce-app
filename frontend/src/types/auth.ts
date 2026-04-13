@@ -43,6 +43,7 @@ export interface ResetPasswordData {
 export interface UpdateProfileData {
   name?: string;
   avatar?: string;
+  role?: UserRole;
 }
 
 export interface ChangePasswordData {

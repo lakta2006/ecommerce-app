@@ -90,7 +90,7 @@ export const RegisterPage: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="الاسم الكامل"
-          placeholder="محمد أحمد"
+          placeholder="الاسم الكامل"
           icon={<User className="w-5 h-5" />}
           error={errors.name}
           {...register('name')}
