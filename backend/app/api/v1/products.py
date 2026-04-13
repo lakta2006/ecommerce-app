@@ -3,8 +3,19 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
 from app.database import get_db
-from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductUpdate, ProductResponse
+from app.models.product import Product, ProductView, Order
+from app.schemas.product import (
+    ProductCreate, 
+    ProductUpdate, 
+    ProductResponse,
+    PopularProductResponse,
+    BestSellingProductResponse,
+    OrderCreate,
+    OrderResponse,
+)
+from app.core.dependencies import get_current_user
+from app.models.user import User
+from typing import Annotated
 
 router = APIRouter(prefix="/products", tags=["products"])
 
@@ -128,7 +139,135 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
     db_product = db.query(Product).filter(Product.id == product_id).first()
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
-    
+
     db.delete(db_product)
     db.commit()
     return None
+
+
+@router.post("/{product_id}/view", status_code=status.HTTP_204_NO_CONTENT)
+def track_product_view(
+    product_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    """Track a product view"""
+    # Check if product exists
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # Record the view
+    view = ProductView(
+        product_id=product_id,
+        user_id=current_user.id
+    )
+    db.add(view)
+    db.commit()
+    return None
+
+
+@router.get("/popular", response_model=List[PopularProductResponse])
+def get_popular_products(
+    skip: int = 0,
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """Get most popular products based on view count"""
+    popular_products = (
+        db.query(
+            Product,
+            func.count(ProductView.id).label('view_count')
+        )
+        .outerjoin(ProductView, Product.id == ProductView.product_id)
+        .group_by(Product.id)
+        .order_by(func.count(ProductView.id).desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    result = []
+    for product, view_count in popular_products:
+        result.append({
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'image': product.image,
+            'category': product.category,
+            'description': product.description,
+            'original_price': product.original_price,
+            'store_id': product.store_id,
+            'created_at': product.created_at,
+            'updated_at': product.updated_at,
+            'view_count': view_count,
+        })
+    
+    return result
+
+
+@router.get("/best-selling", response_model=List[BestSellingProductResponse])
+def get_best_selling_products(
+    skip: int = 0,
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """Get best selling products based on completed orders"""
+    best_selling = (
+        db.query(
+            Product,
+            func.count(Order.id).label('order_count')
+        )
+        .outerjoin(Order, Product.id == Order.product_id)
+        .filter(Order.status == 'completed')
+        .group_by(Product.id)
+        .order_by(func.count(Order.id).desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    result = []
+    for product, order_count in best_selling:
+        result.append({
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'image': product.image,
+            'category': product.category,
+            'description': product.description,
+            'original_price': product.original_price,
+            'store_id': product.store_id,
+            'created_at': product.created_at,
+            'updated_at': product.updated_at,
+            'order_count': order_count,
+        })
+    
+    return result
+
+
+@router.post("/orders", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
+def create_order(
+    order: OrderCreate,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    """Create a new order (completed purchase)"""
+    # Check if product exists
+    product = db.query(Product).filter(Product.id == order.product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # Create the order
+    db_order = Order(
+        user_id=current_user.id,
+        product_id=order.product_id,
+        quantity=order.quantity,
+        total_price=order.total_price,
+        status='completed'
+    )
+    db.add(db_order)
+    db.commit()
+    db.refresh(db_order)
+    
+    return db_order

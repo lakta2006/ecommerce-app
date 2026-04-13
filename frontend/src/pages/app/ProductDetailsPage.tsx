@@ -22,17 +22,24 @@ export const ProductDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
-      
+
       try {
         setIsLoading(true);
         const fetchedProduct = await productService.getProduct(Number(id));
         setProduct(fetchedProduct);
         setProductIsInCart(checkIsInCart(fetchedProduct.id));
-        
+
         // Fetch related products from same category
         const allProducts = await productService.getProducts();
         const related = allProducts.filter((p) => p.category === fetchedProduct.category && p.id !== fetchedProduct.id).slice(0, 4);
         setRelatedProducts(related);
+
+        // Track product view
+        try {
+          await productService.trackProductView(Number(id));
+        } catch (error) {
+          console.error('Failed to track product view:', error);
+        }
       } catch (error) {
         console.error('Failed to fetch product:', error);
         setProduct(null);

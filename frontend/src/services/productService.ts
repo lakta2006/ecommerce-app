@@ -11,6 +11,14 @@ export interface Product {
   store_id?: number | null;
 }
 
+export interface PopularProduct extends Product {
+  view_count: number;
+}
+
+export interface BestSellingProduct extends Product {
+  order_count: number;
+}
+
 export interface Category {
   id: number;
   name: string;
@@ -26,6 +34,22 @@ export interface ProductCreateData {
   description?: string;
   original_price?: number;
   store_id?: number | null;
+}
+
+export interface OrderCreateData {
+  product_id: number;
+  quantity: number;
+  total_price: number;
+}
+
+export interface Order {
+  id: number;
+  user_id: number;
+  product_id: number;
+  quantity: number;
+  total_price: number;
+  status: string;
+  created_at: string;
 }
 
 export const productService = {
@@ -86,6 +110,29 @@ export const productService = {
   // Get new arrivals
   getNewArrivals: async (limit: number = 4): Promise<Product[]> => {
     const response = await apiClient.get(`/api/products?new_arrivals=true&limit=${limit}`);
+    return response.data;
+  },
+
+  // Track product view
+  trackProductView: async (productId: number): Promise<void> => {
+    await apiClient.post(`/api/products/${productId}/view`);
+  },
+
+  // Get most popular products
+  getPopularProducts: async (limit: number = 10): Promise<PopularProduct[]> => {
+    const response = await apiClient.get(`/api/products/popular?limit=${limit}`);
+    return response.data;
+  },
+
+  // Get best selling products
+  getBestSellingProducts: async (limit: number = 10): Promise<BestSellingProduct[]> => {
+    const response = await apiClient.get(`/api/products/best-selling?limit=${limit}`);
+    return response.data;
+  },
+
+  // Create an order
+  createOrder: async (order: OrderCreateData): Promise<Order> => {
+    const response = await apiClient.post('/api/products/orders', order);
     return response.data;
   },
 };

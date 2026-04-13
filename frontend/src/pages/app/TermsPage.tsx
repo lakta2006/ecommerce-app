@@ -105,10 +105,13 @@ export const TermsPage: React.FC = () => {
               <span className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 flex items-center justify-center text-xs font-bold">٥</span>
               التواصل
             </h3>
-            <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <a
+              href="mailto:lakta.lakta.2026@gmail.com"
+              className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
               <Mail className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-sm">support@lakta.com</span>
-            </div>
+              <span className="text-sm text-primary-600 dark:text-primary-500">lakta.lakta.2026@gmail.com</span>
+            </a>
           </section>
         </div>
 

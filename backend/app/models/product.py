@@ -20,3 +20,32 @@ class Product(Base):
 
     # Relationship
     store = relationship("Store", back_populates="products")
+
+
+class ProductView(Base):
+    __tablename__ = "product_views"
+
+    id = Column(Integer, primary_key=True, index=True)
+    product_id = Column(Integer, ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
+    viewed_at = Column(DateTime, server_default='now()')
+
+    # Relationships
+    product = relationship("Product")
+    user = relationship("User")
+
+
+class Order(Base):
+    __tablename__ = "orders"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
+    quantity = Column(Integer, nullable=False, server_default='1')
+    total_price = Column(Float, nullable=False)
+    status = Column(String(50), nullable=False, server_default='completed')
+    created_at = Column(DateTime, server_default='now()')
+
+    # Relationships
+    product = relationship("Product")
+    user = relationship("User")

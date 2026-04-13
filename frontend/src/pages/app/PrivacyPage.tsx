@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
-import { ArrowRight, Shield, Eye, Mail } from 'lucide-react';
+import { ArrowRight, Shield, Eye } from 'lucide-react';
 
 export const PrivacyPage: React.FC = () => {
   const navigate = useNavigate();
@@ -118,18 +118,6 @@ export const PrivacyPage: React.FC = () => {
               <p className="text-sm">
                 نستخدم ملفات تعريف الارتباط لتحسين تجربتك. يمكنك التحكم بها عبر إعدادات المتصفح.
               </p>
-            </div>
-          </section>
-
-          {/* Section 6 */}
-          <section>
-            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 flex items-center justify-center text-xs font-bold">٦</span>
-              التواصل
-            </h3>
-            <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-              <Mail className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-sm">privacy@lakta.com</span>
             </div>
           </section>
         </div>
