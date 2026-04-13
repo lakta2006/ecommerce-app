@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Package, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Package, ArrowLeft, ArrowRight, Truck } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useToast } from '@/components/ui';
 import { StickyHeader } from '@/components/layouts';
@@ -161,6 +161,13 @@ export const CartPage: React.FC = () => {
               <div className="flex items-center justify-between text-gray-600 dark:text-gray-400">
                 <span>الشحن</span>
                 <span className="text-green-600 dark:text-green-500 font-medium">مجاني</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <Truck className="w-4 h-4 text-amber-600 dark:text-amber-500" />
+                  <span className="font-semibold text-amber-700 dark:text-amber-400">الدفع عند الاستلام</span>
+                </div>
+                <ArrowRight className="w-4 h-4 text-amber-600 dark:text-amber-500 animate-pulse" />
               </div>
               <div className="border-t border-gray-200 dark:border-gray-600 pt-3 flex items-center justify-between">
                 <span className="font-bold text-gray-900 dark:text-gray-100">المجموع الكلي</span>
