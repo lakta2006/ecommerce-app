@@ -30,10 +30,7 @@ import {
   CheckoutPage,
   TermsPage,
   PrivacyPage,
-} from './pages/app';
-import { AdminDashboard, StoreManagement } from './pages/admin';
-import { AdminStoreDetail } from './pages/admin/AdminStoreDetail';
-
+} from './pages/app'; 
 function App() {
   const { checkAuth } = useAuthStore();
 
@@ -207,7 +204,6 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute>
-              <AdminDashboard />
             </ProtectedRoute>
           }
         />
@@ -217,7 +213,6 @@ function App() {
           path="/admin/stores"
           element={
             <ProtectedRoute>
-              <StoreManagement />
             </ProtectedRoute>
           }
         />
@@ -227,7 +222,7 @@ function App() {
           path="/admin/stores/:storeId"
           element={
             <ProtectedRoute>
-              <AdminStoreDetail />
+          
             </ProtectedRoute>
           }
         />
