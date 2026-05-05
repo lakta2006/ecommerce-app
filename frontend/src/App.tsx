@@ -198,34 +198,6 @@ function App() {
         {/* Public Legal Pages */}
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
-
-        {/* Admin Route - Separate Layout */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Admin Store Management Route */}
-        <Route
-          path="/admin/stores"
-          element={
-            <ProtectedRoute>
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Admin Store Detail Route */}
-        <Route
-          path="/admin/stores/:storeId"
-          element={
-            <ProtectedRoute>
-          
-            </ProtectedRoute>
-          }
-        />
       </Routes>
     </BrowserRouter>
   );
