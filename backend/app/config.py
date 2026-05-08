@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     WHATSAPP_BASE_URL: str = "https://wa.me"
 
     # CORS
-    ALLOWED_ORIGINS: list = ["http://localhost:5173", "http://localhost:3000"]
+    ALLOWED_ORIGINS: list = ["http://localhost:5173", "http://localhost:3000", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176", "http://localhost:5177", "http://localhost:5178", "http://127.0.0.1:54369", "http://127.0.0.1:*", "http://localhost:*"]
 
     # File Upload
     MAX_UPLOAD_SIZE: int = 5 * 1024 * 1024  # 5MB
