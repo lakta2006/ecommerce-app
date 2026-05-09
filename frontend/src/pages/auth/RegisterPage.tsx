@@ -5,17 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '@/stores/authStore';
 import { registerSchema } from '@/utils/validations';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
-import { Input, Button, Select, PasswordStrength } from '@/components/ui';
+import { Input, Button, PasswordStrength } from '@/components/ui';
 import { useToast } from '@/components/ui';
-import { Mail, Lock, User, Shield } from 'lucide-react';
+import { Mail, User } from 'lucide-react';
 import { getAuthErrorMessage } from '@/utils/authErrors';
-import type { RegisterFormData, UserRole } from './types';
-
-const roleOptions = [
-  { value: 'customer', label: 'زبون' },
-  { value: 'store_owner', label: 'صاحب متجر' },
-  { value: 'mall_owner', label: 'صاحب مول' },
-];
+import type { RegisterFormData } from './types';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -51,7 +45,6 @@ export const RegisterPage: React.FC = () => {
         email: data.email,
         name: data.name,
         password: data.password,
-        role: data.role as UserRole | undefined,
       });
 
       toast.success('تم إنشاء الحساب بنجاح', 'مرحباً بك في لقطة');
@@ -105,15 +98,7 @@ export const RegisterPage: React.FC = () => {
           {...register('email')}
         />
 
-        <Select
-          label="نوع الحساب"
-          icon={<Shield className="w-5 h-5" />}
-          options={roleOptions}
-          placeholder="اختر نوع الحساب"
-          error={errors.role}
-          {...register('role')}
-        />
-
+        
         <div>
           <Input
             label="كلمة المرور"

@@ -92,7 +92,7 @@ export const SettingsPage: React.FC = () => {
             <h3 className="text-lg font-semibold truncate dark:text-gray-100">{user.name}</h3>
             <p className="text-gray-500 dark:text-gray-400 text-sm truncate">{user.email}</p>
             <span className="inline-block mt-1 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded">
-              {user.role === 'customer' && 'زبون'}
+              {user.role === 'customer' && 'مستخدم'}
               {user.role === 'store_owner' && 'صاحب متجر'}
               {user.role === 'mall_owner' && 'صاحب مول'}
               {user.role === 'admin' && 'مدير'}

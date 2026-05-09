@@ -37,7 +37,6 @@ export const registerSchema = z.object({
   email: z.string().email('البريد الإلكتروني غير صحيح'),
   password: z.string().min(8, 'كلمة المرور يجب أن تكون ٨ أحرف على الأقل'),
   confirmPassword: z.string(),
-  role: z.enum(['customer', 'store_owner', 'mall_owner', 'admin']).optional(),
 })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'كلمتا المرور غير متطابقتين',

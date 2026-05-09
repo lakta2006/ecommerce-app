@@ -10,7 +10,7 @@ export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 export type UserRole = 'customer' | 'store_owner' | 'mall_owner' | 'admin';
 
 export const roleLabels: Record<UserRole, string> = {
-  customer: 'زبون',
+  customer: 'مستخدم',
   store_owner: 'صاحب متجر',
   mall_owner: 'صاحب مول',
   admin: 'مدير',

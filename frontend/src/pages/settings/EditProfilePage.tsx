@@ -6,11 +6,11 @@ import { useAuthStore } from '@/stores/authStore';
 import { authService } from '@/services/authService';
 import { updateProfileSchema } from '@/utils/validations';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
-import { Input, Button, Card, Select } from '@/components/ui';
+import { Input, Button, Card } from '@/components/ui';
 import { useToast } from '@/components/ui';
-import { User as UserIcon, Camera, Store } from 'lucide-react';
+import { User as UserIcon, Camera } from 'lucide-react';
 import { getAuthErrorMessage } from '@/utils/authErrors';
-import type { UpdateProfileData, UserRole } from '@/types/auth';
+import type { UpdateProfileData } from '@/types/auth';
 
 export const EditProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +18,6 @@ export const EditProfilePage: React.FC = () => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string>(user?.avatar || '');
-  const [selectedRole, setSelectedRole] = useState<UserRole>(user?.role || 'customer');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -62,7 +61,6 @@ export const EditProfilePage: React.FC = () => {
       const payload: UpdateProfileData = {
         name: data.name,
         avatar: avatarPreview || undefined,
-        role: selectedRole,
       };
 
       const updatedUser = await authService.updateProfile(payload);
@@ -145,19 +143,7 @@ export const EditProfilePage: React.FC = () => {
               {...register('name')}
             />
 
-            <Select
-              label="نوع الحساب"
-              value={selectedRole}
-              onChange={(e) => setSelectedRole(e.target.value as UserRole)}
-              icon={<Store className="w-5 h-5" />}
-              options={[
-                { value: 'customer', label: 'زبون' },
-                { value: 'store_owner', label: 'صاحب متجر' },
-                { value: 'mall_owner', label: 'صاحب مول' },
-                { value: 'admin', label: 'مدير' },
-              ]}
-            />
-
+            
             <div className="flex gap-3 pt-4">
               <Button type="submit" className="flex-1" isLoading={isLoading}>
                 حفظ التغييرات

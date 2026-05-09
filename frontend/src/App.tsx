@@ -40,7 +40,7 @@ function App() {
   }, [checkAuth]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Routes>
         {/* Public Routes - No AppShell */}
         <Route path="/login" element={<LoginPage />} />

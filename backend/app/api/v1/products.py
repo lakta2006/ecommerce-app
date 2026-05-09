@@ -89,6 +89,81 @@ def get_products(
     return products
 
 
+@router.get("/popular", response_model=List[PopularProductResponse])
+def get_popular_products(
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """Get most popular products based on view count"""
+    popular_products = (
+        db.query(
+            Product,
+            func.count(ProductView.id).label('view_count')
+        )
+        .outerjoin(ProductView, Product.id == ProductView.product_id)
+        .group_by(Product.id)
+        .order_by(func.count(ProductView.id).desc())
+        .limit(limit)
+        .all()
+    )
+
+    result = []
+    for product, view_count in popular_products:
+        result.append({
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'image': product.image,
+            'category': product.category,
+            'description': product.description,
+            'original_price': product.original_price,
+            'store_id': product.store_id,
+            'created_at': product.created_at,
+            'updated_at': product.updated_at,
+            'view_count': view_count,
+        })
+    
+    return result
+
+
+@router.get("/best-selling", response_model=List[BestSellingProductResponse])
+def get_best_selling_products(
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """Get best selling products based on completed orders"""
+    best_selling = (
+        db.query(
+            Product,
+            func.count(Order.id).label('order_count')
+        )
+        .outerjoin(Order, Product.id == Order.product_id)
+        .filter(Order.status == 'completed')
+        .group_by(Product.id)
+        .order_by(func.count(Order.id).desc())
+        .limit(limit)
+        .all()
+    )
+
+    result = []
+    for product, order_count in best_selling:
+        result.append({
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'image': product.image,
+            'category': product.category,
+            'description': product.description,
+            'original_price': product.original_price,
+            'store_id': product.store_id,
+            'created_at': product.created_at,
+            'updated_at': product.updated_at,
+            'order_count': order_count,
+        })
+    
+    return result
+
+
 @router.get("/{product_id}", response_model=ProductResponse)
 def get_product(product_id: int, db: Session = Depends(get_db)):
     """Get a single product by ID"""
@@ -165,85 +240,6 @@ def track_product_view(
     db.add(view)
     db.commit()
     return None
-
-
-@router.get("/popular", response_model=List[PopularProductResponse])
-def get_popular_products(
-    skip: int = 0,
-    limit: int = 10,
-    db: Session = Depends(get_db)
-):
-    """Get most popular products based on view count"""
-    popular_products = (
-        db.query(
-            Product,
-            func.count(ProductView.id).label('view_count')
-        )
-        .outerjoin(ProductView, Product.id == ProductView.product_id)
-        .group_by(Product.id)
-        .order_by(func.count(ProductView.id).desc())
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
-
-    result = []
-    for product, view_count in popular_products:
-        result.append({
-            'id': product.id,
-            'name': product.name,
-            'price': product.price,
-            'image': product.image,
-            'category': product.category,
-            'description': product.description,
-            'original_price': product.original_price,
-            'store_id': product.store_id,
-            'created_at': product.created_at,
-            'updated_at': product.updated_at,
-            'view_count': view_count,
-        })
-    
-    return result
-
-
-@router.get("/best-selling", response_model=List[BestSellingProductResponse])
-def get_best_selling_products(
-    skip: int = 0,
-    limit: int = 10,
-    db: Session = Depends(get_db)
-):
-    """Get best selling products based on completed orders"""
-    best_selling = (
-        db.query(
-            Product,
-            func.count(Order.id).label('order_count')
-        )
-        .outerjoin(Order, Product.id == Order.product_id)
-        .filter(Order.status == 'completed')
-        .group_by(Product.id)
-        .order_by(func.count(Order.id).desc())
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
-
-    result = []
-    for product, order_count in best_selling:
-        result.append({
-            'id': product.id,
-            'name': product.name,
-            'price': product.price,
-            'image': product.image,
-            'category': product.category,
-            'description': product.description,
-            'original_price': product.original_price,
-            'store_id': product.store_id,
-            'created_at': product.created_at,
-            'updated_at': product.updated_at,
-            'order_count': order_count,
-        })
-    
-    return result
 
 
 @router.post("/orders", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
