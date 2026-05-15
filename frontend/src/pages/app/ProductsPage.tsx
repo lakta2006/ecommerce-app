@@ -147,7 +147,7 @@ export const ProductsPage: React.FC = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         placeholder="البحث عن المنتجات..."
-        icon={<Package className="w-5 h-5 text-primary-600 dark:text-primary-500" />}
+        icon={<Package className="w-5 h-5 text-light-heading dark:text-dark-heading" />}
       />
 
       {/* Main Content */}
@@ -158,7 +158,7 @@ export const ProductsPage: React.FC = () => {
           {selectedCategory && (
             <button
               onClick={clearCategoryFilter}
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-md text-xs font-medium hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-light-border dark:bg-dark-border text-light-heading dark:text-dark-heading rounded-md text-xs font-medium hover:bg-light-heading/10 dark:hover:bg-dark-heading/10 transition-colors"
             >
               <X className="w-3 h-3" />
               <span>{selectedCategory}</span>
@@ -168,7 +168,7 @@ export const ProductsPage: React.FC = () => {
           {/* Sort Dropdown */}
           <div className="relative ml-auto">
             <select
-              className="appearance-none bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md pl-8 pr-2.5 py-1.5 text-xs text-gray-600 dark:text-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-500 cursor-pointer transition-all"
+              className="appearance-none bg-light-border dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-md pl-8 pr-2.5 py-1.5 text-xs text-light-text dark:text-dark-text focus:outline-none focus:ring-1 focus:ring-light-heading cursor-pointer transition-all"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
@@ -177,7 +177,7 @@ export const ProductsPage: React.FC = () => {
               <option value="price-desc">السعر: الأعلى</option>
               <option value="name">الاسم</option>
             </select>
-            <SlidersHorizontal className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 dark:text-gray-500 pointer-events-none" />
+            <SlidersHorizontal className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-light-icon dark:text-dark-heading pointer-events-none" />
           </div>
         </div>
 
@@ -187,8 +187,8 @@ export const ProductsPage: React.FC = () => {
             onClick={clearCategoryFilter}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               !selectedCategory
-                ? 'bg-primary-600 text-white'
-                : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
             }`}
           >
             الكل
@@ -201,8 +201,8 @@ export const ProductsPage: React.FC = () => {
               }}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === category
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                  : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
               }`}
             >
               {category}
@@ -219,7 +219,7 @@ export const ProductsPage: React.FC = () => {
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">لا توجد منتجات بعد</p>
+            <p className="text-light-secondaryText text-lg">لا توجد منتجات بعد</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

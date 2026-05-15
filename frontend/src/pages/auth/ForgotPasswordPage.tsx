@@ -71,7 +71,7 @@ export const ForgotPasswordPage: React.FC = () => {
           </Link>
           <Link
             to="/login"
-            className="block text-center text-primary-600 dark:text-primary-500 hover:underline"
+            className="block text-center text-light-link dark:text-dark-link hover:underline"
           >
             العودة لتسجيل الدخول
           </Link>
@@ -108,7 +108,7 @@ export const ForgotPasswordPage: React.FC = () => {
       <div className="mt-6 text-center">
         <Link
           to="/login"
-          className="text-sm text-primary-600 dark:text-primary-500 hover:underline"
+          className="text-sm text-light-link dark:text-dark-link hover:underline"
         >
           العودة لتسجيل الدخول
         </Link>

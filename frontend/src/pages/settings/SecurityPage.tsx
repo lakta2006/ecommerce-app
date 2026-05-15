@@ -7,7 +7,6 @@ import { changePasswordSchema } from '@/utils/validations';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { Input, Button, Card, PasswordStrength } from '@/components/ui';
 import { useToast } from '@/components/ui';
-import { Lock } from 'lucide-react';
 import { getAuthErrorMessage } from '@/utils/authErrors';
 import type { ChangePasswordData } from '@/types/auth';
 
@@ -111,7 +110,7 @@ export const SecurityPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => navigate('/forgot-password')}
-                className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400"
+                className="text-sm text-light-link dark:text-dark-link hover:text-light-heading dark:hover:text-dark-heading"
               >
                 نسيت كلمة المرور
               </button>

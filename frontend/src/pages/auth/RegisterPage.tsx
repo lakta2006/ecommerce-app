@@ -135,11 +135,11 @@ export const RegisterPage: React.FC = () => {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-light-secondaryText dark:text-dark-text">
           لديك حساب بالفعل؟{' '}
           <Link
             to="/login"
-            className="text-primary-600 dark:text-primary-500 font-medium hover:underline"
+            className="text-light-link dark:text-dark-link font-medium hover:underline"
           >
             تسجيل الدخول
           </Link>

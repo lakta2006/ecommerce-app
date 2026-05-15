@@ -52,7 +52,7 @@ export const AppearancePage: React.FC = () => {
       <div className="space-y-4">
         {/* Theme Selection */}
         <Card>
-          <h3 className="text-lg font-semibold mb-4 dark:text-gray-100">اختر المظهر</h3>
+          <h3 className="text-lg font-semibold mb-4 text-light-heading dark:text-dark-heading">اختر المظهر</h3>
           <div className="space-y-3">
             {themeOptions.map((option) => {
               const isSelected = theme === option.id;
@@ -62,15 +62,15 @@ export const AppearancePage: React.FC = () => {
                   onClick={() => handleThemeChange(option.id)}
                   className={`w-full flex items-center gap-4 p-4 rounded-lg border-2 transition-all ${
                     isSelected
-                      ? 'border-primary-600 dark:border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                      ? 'border-light-heading dark:border-dark-heading bg-light-border dark:bg-dark-border'
+                      : 'border-light-border dark:border-dark-border hover:border-light-heading dark:hover:border-dark-heading'
                   }`}
                 >
                   <div
                     className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
                       isSelected
-                        ? 'bg-primary-600 dark:bg-primary-700 text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                        : 'bg-light-border dark:bg-dark-border text-light-icon dark:text-dark-heading'
                     }`}
                   >
                     {option.icon}
@@ -78,15 +78,15 @@ export const AppearancePage: React.FC = () => {
                   <div className="flex-1 text-right">
                     <p
                       className={`font-medium ${
-                        isSelected ? 'text-primary-700 dark:text-primary-400' : 'text-gray-900 dark:text-gray-100'
+                        isSelected ? 'text-light-heading dark:text-dark-heading' : 'text-light-text dark:text-dark-text'
                       }`}
                     >
                       {option.name}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{option.description}</p>
+                    <p className="text-sm text-light-secondaryText dark:text-dark-text">{option.description}</p>
                   </div>
                   {isSelected && (
-                    <div className="flex-shrink-0 text-primary-600 dark:text-primary-500">
+                    <div className="flex-shrink-0 text-light-heading dark:text-dark-heading">
                       <Check className="w-5 h-5" />
                     </div>
                   )}
@@ -98,14 +98,14 @@ export const AppearancePage: React.FC = () => {
 
         {/* Preview Card */}
         <Card>
-          <h3 className="text-lg font-semibold mb-3 dark:text-gray-100">معاينة</h3>
+          <h3 className="text-lg font-semibold mb-3 text-light-heading dark:text-dark-heading">معاينة</h3>
           <div
             className={`rounded-lg p-6 ${
               theme === 'dark'
-                ? 'bg-gray-800 text-white'
+                ? 'bg-dark-bg text-dark-text'
                 : theme === 'system'
-                ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
-                : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-600'
+                ? 'bg-light-border dark:bg-dark-border text-light-text dark:text-dark-text'
+                : 'bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text border border-light-border dark:border-dark-border'
             }`}
           >
             <h4 className="font-medium mb-2">كيف يبدو المظهر؟</h4>
@@ -118,14 +118,14 @@ export const AppearancePage: React.FC = () => {
         {/* Info */}
         <Card>
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
-              <Monitor className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center">
+              <Monitor className="w-5 h-5 text-light-heading dark:text-dark-heading" />
             </div>
             <div>
-              <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-1">
+              <h4 className="font-medium text-light-heading dark:text-dark-heading mb-1">
                 حول وضع النظام
               </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-light-secondaryText dark:text-dark-text">
                 عند اختيار &quot;وضع النظام&quot;, سيتبع التطبيق إعدادات جهازك
                 تلقائياً. إذا كان جهازك في الوضع الداكن، سيصبح التطبيق داكناً
                 أيضاً.

@@ -170,15 +170,15 @@ export const ProfilePage: React.FC = () => {
         <Card>
           <div className="flex items-center gap-4 mb-4">
             <div className="relative cursor-pointer group" onClick={handleAvatarClick}>
-              <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="w-16 h-16 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {avatarPreview ? (
                   <img src={avatarPreview} alt={user.name} className="w-16 h-16 rounded-full object-cover" />
                 ) : (
-                  <UserIcon className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+                  <UserIcon className="w-8 h-8 text-light-icon dark:text-dark-heading" />
                 )}
               </div>
               {/* Camera Icon Overlay */}
-              <div className="absolute bottom-0 right-0 w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center border-2 border-white">
+              <div className="absolute bottom-0 right-0 w-6 h-6 bg-light-heading rounded-full flex items-center justify-center border-2 border-white">
                 <Camera className="w-3 h-3 text-white" />
               </div>
               {/* Hover Effect */}
@@ -194,17 +194,17 @@ export const ProfilePage: React.FC = () => {
               className="hidden"
             />
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold truncate dark:text-gray-100">{user.name}</h3>
-              <p className="text-gray-500 dark:text-gray-400 text-sm truncate">{user.email}</p>
+              <h3 className="text-lg font-semibold truncate text-light-heading dark:text-dark-heading">{user.name}</h3>
+              <p className="text-light-secondaryText dark:text-dark-text text-sm truncate">{user.email}</p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="inline-block px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded">
+                <span className="inline-block px-2 py-1 text-xs bg-light-border dark:bg-dark-border text-light-heading dark:text-dark-heading rounded">
                   {user.role === 'customer' && 'مستخدم'}
                   {user.role === 'store_owner' && 'صاحب متجر'}
                   {user.role === 'mall_owner' && 'صاحب مول'}
                   {user.role === 'admin' && 'مدير'}
                 </span>
                 {user.is_verified && (
-                  <span className="inline-block px-2 py-1 text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded">
+                  <span className="inline-block px-2 py-1 text-xs bg-light-border dark:bg-dark-border text-light-price dark:text-dark-link rounded">
                     موثق
                   </span>
                 )}
@@ -245,8 +245,8 @@ export const ProfilePage: React.FC = () => {
         {/* Change Password Section */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold dark:text-gray-100 flex items-center gap-2">
-              <Lock className="w-5 h-5 dark:text-gray-400" />
+            <h3 className="text-lg font-semibold text-light-heading dark:text-dark-heading flex items-center gap-2">
+              <Lock className="w-5 h-5 text-light-icon dark:text-dark-heading" />
               كلمة المرور
             </h3>
             {!showPasswordForm && (
@@ -324,8 +324,8 @@ export const ProfilePage: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium dark:text-gray-100">تسجيل الخروج</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="font-medium text-light-text dark:text-dark-text">تسجيل الخروج</p>
+                <p className="text-sm text-light-secondaryText dark:text-dark-text">
                   تسجيل الخروج من حسابك الحالي
                 </p>
               </div>

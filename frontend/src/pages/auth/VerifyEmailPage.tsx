@@ -67,8 +67,8 @@ export const VerifyEmailPage: React.FC = () => {
         subtitle="يرجى الانتظار"
       >
         <div className="flex flex-col items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 dark:border-primary-500 mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">جاري التحقق من بريدك الإلكتروني...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-light-heading dark:border-dark-heading mb-4" />
+          <p className="text-light-secondaryText dark:text-dark-text">جاري التحقق من بريدك الإلكتروني...</p>
         </div>
       </AuthLayout>
     );
@@ -96,7 +96,7 @@ export const VerifyEmailPage: React.FC = () => {
             </Button>
             <Link
               to="/login"
-              className="block text-center text-primary-600 dark:text-primary-500 hover:underline"
+              className="block text-center text-light-link dark:text-dark-link hover:underline"
             >
               العودة لتسجيل الدخول
             </Link>
@@ -129,7 +129,7 @@ export const VerifyEmailPage: React.FC = () => {
         </Button>
         <Link
           to="/"
-          className="block text-center text-primary-600 dark:text-primary-500 hover:underline"
+          className="block text-center text-light-link dark:text-dark-link hover:underline"
         >
           العودة للصفحة الرئيسية
         </Link>

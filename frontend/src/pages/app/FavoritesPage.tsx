@@ -60,13 +60,13 @@ export const FavoritesPage: React.FC = () => {
           <div className="w-24 h-24 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Heart className="w-12 h-12 text-red-300 dark:text-red-800" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">قائمة المفضلة فارغة</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-light-heading dark:text-dark-heading mb-3">قائمة المفضلة فارغة</h2>
+          <p className="text-light-secondaryText dark:text-dark-text mb-8 max-w-md mx-auto">
             قم بإضافة المنتجات إلى المفضلة للوصول إليها بسرعة لاحقاً
           </p>
           <Link
             to="/products"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-200 dark:shadow-primary-900/50"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white rounded-lg font-medium hover:opacity-90 transition-colors shadow-lg"
           >
             <ArrowLeft className="w-5 h-5 rotate-180" />
             <span>تصفح المنتجات</span>
@@ -87,7 +87,7 @@ export const FavoritesPage: React.FC = () => {
       {/* Content */}
       <div className="px-4 py-4">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-sm text-gray-600 dark:text-gray-400">{favoriteProducts.length} منتج</span>
+          <span className="text-sm text-light-secondaryText dark:text-dark-text">{favoriteProducts.length} منتج</span>
         </div>
 
         {/* Products Grid */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Store, ChevronLeft } from 'lucide-react';
 import { storeService, Store as StoreType } from '@/services/storeService';
@@ -21,17 +21,7 @@ export const StoreDetailsPage: React.FC = () => {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchStore();
-  }, [slug]);
-
-  useEffect(() => {
-    if (store) {
-      fetchProducts();
-    }
-  }, [store]);
-
-  const fetchStore = async () => {
+  const fetchStore = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -47,9 +37,9 @@ export const StoreDetailsPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [slug]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setIsLoadingProducts(true);
       if (store && store.id) {
@@ -62,20 +52,30 @@ export const StoreDetailsPage: React.FC = () => {
     } finally {
       setIsLoadingProducts(false);
     }
-  };
+  }, [store]);
+
+  useEffect(() => {
+    fetchStore();
+  }, [fetchStore]);
+
+  useEffect(() => {
+    if (store) {
+      fetchProducts();
+    }
+  }, [store, fetchProducts]);
 
   if (isLoading) {
     return (
       <div className="space-y-8">
         <button
           onClick={() => navigate('/stores')}
-          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          className="flex items-center gap-2 text-light-secondaryText dark:text-dark-text hover:text-light-heading dark:hover:text-dark-heading transition-colors"
         >
           <ChevronLeft className="w-5 h-5 rotate-180" />
           <span>العودة للمتاجر</span>
         </button>
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-light-heading"></div>
         </div>
       </div>
     );
@@ -86,20 +86,20 @@ export const StoreDetailsPage: React.FC = () => {
       <div className="space-y-8">
         <button
           onClick={() => navigate('/stores')}
-          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          className="flex items-center gap-2 text-light-secondaryText dark:text-dark-text hover:text-light-heading dark:hover:text-dark-heading transition-colors"
         >
           <ChevronLeft className="w-5 h-5 rotate-180" />
           <span>العودة للمتاجر</span>
         </button>
         <div className="text-center py-12">
-          <Store className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          <Store className="w-16 h-16 text-light-icon dark:text-dark-heading mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-light-heading dark:text-dark-heading mb-2">
             {error || 'المتجر غير موجود'}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">عذراً، لا يمكن العثور على هذا المتجر</p>
+          <p className="text-light-secondaryText dark:text-dark-text mb-4">عذراً، لا يمكن العثور على هذا المتجر</p>
           <button
             onClick={() => navigate('/stores')}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white rounded-lg font-medium hover:opacity-90 transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
             <span>العودة للمتاجر</span>
@@ -114,16 +114,16 @@ export const StoreDetailsPage: React.FC = () => {
       {/* Back Button */}
       <button
         onClick={() => navigate('/stores')}
-        className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        className="flex items-center gap-2 text-light-secondaryText dark:text-dark-text hover:text-light-heading dark:hover:text-dark-heading transition-colors"
       >
         <ChevronLeft className="w-5 h-5 rotate-180" />
         <span>العودة للمتاجر</span>
       </button>
 
       {/* Store Details */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden">
+      <div className="bg-light-bg dark:bg-dark-bg rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden">
         {/* Banner */}
-        <div className="h-48 bg-gradient-to-r from-primary-500 to-primary-700 relative">
+        <div className="h-48 bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] relative">
           {store.banner ? (
             <img src={store.banner} alt={store.name} className="w-full h-full object-cover" />
           ) : (
@@ -143,12 +143,12 @@ export const StoreDetailsPage: React.FC = () => {
                 className="w-20 h-20 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-lg"
               />
             ) : (
-              <div className="w-20 h-20 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center border-4 border-white dark:border-gray-800 shadow-lg">
-                <Store className="w-10 h-10 text-primary-600 dark:text-primary-500" />
+              <div className="w-20 h-20 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center border-4 border-light-bg dark:border-dark-bg shadow-lg">
+                <Store className="w-10 h-10 text-light-heading dark:text-dark-heading" />
               </div>
             )}
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{store.name}</h1>
+              <h1 className="text-2xl font-bold text-light-heading dark:text-dark-heading">{store.name}</h1>
               <span
                 className={`inline-block mt-1 text-xs px-3 py-1 rounded-full ${
                   store.is_active

@@ -137,8 +137,8 @@ export const HomePage: React.FC = () => {
             onClick={() => setActiveFilter('all')}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               activeFilter === 'all'
-                ? 'bg-primary-600 text-white'
-                : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
             }`}
           >
             الكل
@@ -147,8 +147,8 @@ export const HomePage: React.FC = () => {
             onClick={() => setActiveFilter('popular')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               activeFilter === 'popular'
-                ? 'bg-primary-600 text-white'
-                : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
             }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
@@ -158,8 +158,8 @@ export const HomePage: React.FC = () => {
             onClick={() => setActiveFilter('best-selling')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               activeFilter === 'best-selling'
-                ? 'bg-primary-600 text-white'
-                : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
             }`}
           >
             <Star className="w-3.5 h-3.5" />
@@ -171,12 +171,12 @@ export const HomePage: React.FC = () => {
         {searchQuery && (
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+              <h2 className="text-lg font-bold text-light-heading dark:text-dark-heading">
                 نتائج البحث ({displayedProducts.length})
               </h2>
               <button
                 onClick={clearSearch}
-                className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium"
+                className="text-sm text-light-link dark:text-dark-link hover:text-light-heading dark:hover:text-dark-heading font-medium"
               >
                 مسح البحث
               </button>
@@ -188,8 +188,8 @@ export const HomePage: React.FC = () => {
                 ))}
               </div>
             ) : displayedProducts.length === 0 ? (
-              <div className="text-center py-8 bg-white dark:bg-gray-800 rounded-lg">
-                <p className="text-gray-500 dark:text-gray-400">لا توجد نتائج مطابقة لبحثك</p>
+              <div className="text-center py-8 bg-light-bg dark:bg-dark-bg rounded-lg">
+                <p className="text-light-secondaryText dark:text-dark-text">لا توجد نتائج مطابقة لبحثك</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -212,14 +212,14 @@ export const HomePage: React.FC = () => {
         {!searchQuery && (
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+              <h2 className="text-lg font-bold text-light-heading dark:text-dark-heading">
                 {activeFilter === 'popular'
                   ? 'الأكثر مشاهدة'
                   : activeFilter === 'best-selling'
                   ? 'الأكثر مبيعاً'
                   : 'جميع المنتجات'}
               </h2>
-              <Link to="/products" className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium">
+              <Link to="/products" className="text-sm text-light-link dark:text-dark-link hover:text-light-heading dark:hover:text-dark-heading font-medium">
                 عرض الكل
               </Link>
             </div>
@@ -230,8 +230,8 @@ export const HomePage: React.FC = () => {
                 ))}
               </div>
             ) : displayedProducts.length === 0 ? (
-              <div className="text-center py-8 bg-white dark:bg-gray-800 rounded-lg">
-                <p className="text-gray-500 dark:text-gray-400">لا توجد منتجات بعد</p>
+              <div className="text-center py-8 bg-light-bg dark:bg-dark-bg rounded-lg">
+                <p className="text-light-secondaryText dark:text-dark-text">لا توجد منتجات بعد</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -254,8 +254,8 @@ export const HomePage: React.FC = () => {
         {activeFilter === 'all' && !searchQuery && (
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">المنتجات المميزة</h2>
-              <Link to="/products" className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium">
+              <h2 className="text-lg font-bold text-light-heading dark:text-dark-heading">المنتجات المميزة</h2>
+              <Link to="/products" className="text-sm text-light-link dark:text-dark-link hover:text-light-heading dark:hover:text-dark-heading font-medium">
                 عرض الكل
               </Link>
             </div>
@@ -290,8 +290,8 @@ export const HomePage: React.FC = () => {
         {activeFilter === 'all' && !searchQuery && (
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">وصل حديثاً</h2>
-              <Link to="/products" className="text-sm text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 font-medium">
+              <h2 className="text-lg font-bold text-light-heading dark:text-dark-heading">وصل حديثاً</h2>
+              <Link to="/products" className="text-sm text-light-link dark:text-dark-link hover:text-light-heading dark:hover:text-dark-heading font-medium">
                 عرض الكل
               </Link>
             </div>
@@ -303,7 +303,7 @@ export const HomePage: React.FC = () => {
               </div>
             ) : newArrivals.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500 dark:text-gray-400">لا توجد منتجات جديدة بعد</p>
+                <p className="text-light-secondaryText dark:text-dark-text">لا توجد منتجات جديدة بعد</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

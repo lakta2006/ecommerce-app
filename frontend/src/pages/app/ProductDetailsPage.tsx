@@ -49,7 +49,7 @@ export const ProductDetailsPage: React.FC = () => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [id, checkIsInCart]);
 
   const isFavorite = product ? favoriteIds.includes(product.id) : false;
 
@@ -85,12 +85,12 @@ export const ProductDetailsPage: React.FC = () => {
   if (!product) {
     return (
       <div className="text-center py-12">
-        <Package className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">المنتج غير موجود</h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">عذراً، لا يمكن العثور على هذا المنتج</p>
+        <Package className="w-16 h-16 text-light-icon dark:text-dark-heading mx-auto mb-4" />
+        <h2 className="text-xl font-bold text-light-heading dark:text-dark-heading mb-2">المنتج غير موجود</h2>
+        <p className="text-light-secondaryText dark:text-dark-text mb-4">عذراً، لا يمكن العثور على هذا المنتج</p>
         <button
           onClick={() => navigate('/products')}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white rounded-lg font-medium hover:opacity-90 transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
           <span>العودة للمنتجات</span>
@@ -136,23 +136,23 @@ export const ProductDetailsPage: React.FC = () => {
           <div className="flex flex-col">
             {/* Category */}
             <div className="flex items-center gap-2 mb-2">
-              <Tag className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-              <span className="text-sm text-primary-600 dark:text-primary-500 font-medium">{product.category}</span>
+              <Tag className="w-4 h-4 text-light-icon dark:text-dark-heading" />
+              <span className="text-sm text-light-link dark:text-dark-link font-medium">{product.category}</span>
             </div>
 
             {/* Title */}
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h1 className="text-2xl md:text-3xl font-bold text-light-heading dark:text-dark-heading mb-4">
               {product.name}
             </h1>
 
             {/* Price */}
             <div className="mb-6">
               <div className="flex items-center gap-3">
-                <span className="text-3xl font-bold text-primary-600 dark:text-primary-500">
+                <span className="text-3xl font-bold text-light-price dark:text-dark-link">
                   {product.price} ر.س
                 </span>
                 {hasDiscount && (
-                  <span className="text-xl text-gray-400 dark:text-gray-500 line-through">
+                  <span className="text-xl text-light-secondaryText dark:text-dark-text line-through">
                     {product.originalPrice} ر.س
                   </span>
                 )}
@@ -162,8 +162,8 @@ export const ProductDetailsPage: React.FC = () => {
             {/* Description */}
             {product.description && (
               <div className="mb-6">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">الوصف</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <h3 className="text-sm font-semibold text-light-heading dark:text-dark-heading mb-2">الوصف</h3>
+                <p className="text-light-secondaryText dark:text-dark-text leading-relaxed">
                   {product.description}
                 </p>
               </div>
@@ -171,12 +171,12 @@ export const ProductDetailsPage: React.FC = () => {
 
             {/* Features */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                <Truck className="w-5 h-5 text-primary-600 dark:text-primary-500" />
+              <div className="flex items-center gap-2 text-light-secondaryText dark:text-dark-text">
+                <Truck className="w-5 h-5 text-light-heading dark:text-dark-heading" />
                 <span className="text-sm">شحن مجاني</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                <Shield className="w-5 h-5 text-primary-600 dark:text-primary-500" />
+              <div className="flex items-center gap-2 text-light-secondaryText dark:text-dark-text">
+                <Shield className="w-5 h-5 text-light-heading dark:text-dark-heading" />
                 <span className="text-sm">ضمان سنة</span>
               </div>
             </div>
@@ -189,7 +189,7 @@ export const ProductDetailsPage: React.FC = () => {
                 className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-colors ${
                   productIsInCart
                     ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-500'
-                    : 'bg-primary-600 text-white hover:bg-primary-700'
+                    : 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white hover:opacity-90'
                 }`}
               >
                 <ShoppingCart className="w-5 h-5" />
@@ -216,10 +216,10 @@ export const ProductDetailsPage: React.FC = () => {
 
       {/* Related Products */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">منتجات مشابهة</h2>
+        <h2 className="text-lg font-bold text-light-heading dark:text-dark-heading mb-4">منتجات مشابهة</h2>
         {relatedProducts.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500 dark:text-gray-400">لا توجد منتجات مشابهة</p>
+            <p className="text-light-secondaryText dark:text-dark-text">لا توجد منتجات مشابهة</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -227,9 +227,9 @@ export const ProductDetailsPage: React.FC = () => {
               <div
                 key={relatedProduct.id}
                 onClick={() => navigate(`/products/${relatedProduct.id}`)}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden cursor-pointer hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow"
+                className="bg-light-bg dark:bg-dark-bg rounded-lg shadow-sm border border-light-border dark:border-dark-border overflow-hidden cursor-pointer hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow"
               >
-                <div className="aspect-square bg-gray-100 dark:bg-gray-700">
+                <div className="aspect-square bg-light-border dark:bg-dark-border">
                   <img
                     src={relatedProduct.image}
                     alt={relatedProduct.name}
@@ -237,10 +237,10 @@ export const ProductDetailsPage: React.FC = () => {
                   />
                 </div>
                 <div className="p-3">
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 line-clamp-2 mb-2">
+                  <h3 className="text-sm font-medium text-light-text dark:text-dark-text line-clamp-2 mb-2">
                     {relatedProduct.name}
                   </h3>
-                  <span className="text-primary-600 dark:text-primary-500 font-bold">
+                  <span className="text-light-price dark:text-dark-link font-bold">
                     {relatedProduct.price} ر.س
                   </span>
                 </div>

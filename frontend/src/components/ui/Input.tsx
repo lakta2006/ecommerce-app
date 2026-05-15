@@ -22,13 +22,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-light-text dark:text-dark-text mb-1">
             {label}
           </label>
         )}
         <div className="relative">
           {icon && !showPasswordToggle && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400 dark:text-gray-500">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-light-icon dark:text-dark-heading">
               {icon}
             </div>
           )}
@@ -36,10 +36,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             type={inputType}
             ref={ref}
             className={cn(
-              'w-full px-4 py-2 border border-gray-300 rounded-lg',
-              'focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none',
+              'w-full px-4 py-2 border border-light-border rounded-lg',
+              'focus:ring-2 focus:ring-light-heading focus:border-transparent outline-none',
               'transition-all duration-200',
-              'dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500',
+              'dark:bg-dark-bg dark:border-dark-border dark:text-dark-text dark:placeholder-light-secondaryText',
               icon && !showPasswordToggle && 'pr-10',
               showPasswordToggle && isPassword && 'pl-10',
               error && 'border-red-500 focus:ring-red-500',
@@ -51,7 +51,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              className="absolute inset-y-0 left-0 flex items-center pl-3 text-light-icon hover:text-light-heading dark:text-dark-heading dark:hover:text-light-link transition-colors"
               aria-label={showPassword ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'}
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}

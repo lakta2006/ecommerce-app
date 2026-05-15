@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             )}
             <button
               onClick={this.handleRetry}
-              className="w-full bg-primary-600 hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              className="w-full bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] hover:opacity-90 text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >
               إعادة المحاولة
             </button>

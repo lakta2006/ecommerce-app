@@ -26,12 +26,12 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900/50 z-50">
+    <nav className="fixed top-0 left-0 right-0 bg-light-bg dark:bg-dark-bg shadow-md dark:shadow-gray-900/50 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/home" className="flex items-center">
-            <h1 className="text-2xl font-bold text-primary-600 dark:text-primary-500">لقطة</h1>
+            <h1 className="text-2xl font-bold text-light-heading dark:text-dark-heading">لقطة</h1>
           </Link>
 
           {/* Desktop Navigation */}
@@ -40,7 +40,7 @@ export const Navbar: React.FC = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
+                className="flex items-center gap-2 text-light-text dark:text-dark-text hover:text-light-heading dark:hover:text-dark-heading transition-colors"
               >
                 <link.icon className="w-5 h-5" />
                 <span>{link.label}</span>
@@ -57,25 +57,25 @@ export const Navbar: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
+              className="flex items-center gap-2 text-light-text dark:text-dark-text hover:text-light-heading dark:hover:text-dark-heading transition-colors"
             >
-              <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
-                <span className="text-primary-600 dark:text-primary-400 font-semibold">
+              <div className="w-8 h-8 bg-light-border dark:bg-dark-border rounded-full flex items-center justify-center">
+                <span className="text-light-heading dark:text-dark-heading font-semibold">
                   {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
                 </span>
               </div>
-              <span className="hidden md:inline text-sm font-medium dark:text-gray-300">
+              <span className="hidden md:inline text-sm font-medium text-light-text dark:text-dark-text">
                 {user?.name || user?.email}
               </span>
-              <ChevronDown className="w-4 h-4 dark:text-gray-400" />
+              <ChevronDown className="w-4 h-4 text-light-icon dark:text-dark-heading" />
             </button>
 
             {/* Dropdown Menu */}
             {isUserMenuOpen && (
-              <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700 py-2 z-50">
+              <div className="absolute left-0 mt-2 w-48 bg-light-bg dark:bg-dark-bg rounded-lg shadow-lg dark:shadow-gray-900/50 border border-light-border dark:border-dark-border py-2 z-50">
                 <Link
                   to="/settings"
-                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border transition-colors"
                   onClick={() => setIsUserMenuOpen(false)}
                 >
                   <User className="w-4 h-4" />

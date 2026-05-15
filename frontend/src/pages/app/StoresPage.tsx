@@ -44,11 +44,11 @@ export const StoresPage: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <Store className="w-8 h-8 text-primary-600 dark:text-primary-500" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">المتاجر</h1>
+          <Store className="w-8 h-8 text-light-heading dark:text-dark-heading" />
+          <h1 className="text-2xl font-bold text-light-heading dark:text-dark-heading">المتاجر</h1>
         </div>
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-light-heading"></div>
         </div>
       </div>
     );
@@ -58,8 +58,8 @@ export const StoresPage: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <Store className="w-8 h-8 text-primary-600 dark:text-primary-500" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">المتاجر</h1>
+          <Store className="w-8 h-8 text-light-heading dark:text-dark-heading" />
+          <h1 className="text-2xl font-bold text-light-heading dark:text-dark-heading">المتاجر</h1>
         </div>
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-center">
           <p className="text-red-600 dark:text-red-400">{error}</p>
@@ -76,7 +76,7 @@ export const StoresPage: React.FC = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         placeholder="البحث عن المتاجر..."
-        icon={<Store className="w-5 h-5 text-primary-600 dark:text-primary-500" />}
+        icon={<Store className="w-5 h-5 text-light-heading dark:text-dark-heading" />}
       />
 
       {/* Main Content */}
@@ -84,7 +84,7 @@ export const StoresPage: React.FC = () => {
         {/* Loading State */}
         {isLoading && (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 dark:border-primary-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-light-heading dark:border-dark-heading"></div>
           </div>
         )}
 
@@ -99,22 +99,22 @@ export const StoresPage: React.FC = () => {
         {!isLoading && !error && (
           <>
             {filteredStores.length === 0 ? (
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-12 text-center">
-                <Store className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+              <div className="bg-light-bg dark:bg-dark-bg rounded-lg shadow-sm dark:shadow-gray-900/50 p-12 text-center">
+                <Store className="w-16 h-16 text-light-icon dark:text-dark-heading mx-auto mb-4" />
                 {stores.length > 0 ? (
                   <>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">لا توجد نتائج مطابقة للبحث</h2>
+                    <h2 className="text-xl font-bold text-light-heading dark:text-dark-heading mb-2">لا توجد نتائج مطابقة للبحث</h2>
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="mt-4 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                      className="mt-4 px-6 py-2 bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white rounded-lg hover:opacity-90 transition-colors"
                     >
                       مسح البحث
                     </button>
                   </>
                 ) : (
                   <>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">لا توجد متاجر حالياً</h2>
-                    <p className="text-gray-600 dark:text-gray-400">سيتم إضافة المتاجر قريباً</p>
+                    <h2 className="text-xl font-bold text-light-heading dark:text-dark-heading mb-2">لا توجد متاجر حالياً</h2>
+                    <p className="text-light-secondaryText dark:text-dark-text">سيتم إضافة المتاجر قريباً</p>
                   </>
                 )}
               </div>
@@ -125,10 +125,10 @@ export const StoresPage: React.FC = () => {
                   <div
                     key={store.id}
                     onClick={() => navigate(`/stores/${store.slug}`)}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden cursor-pointer hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow"
+                    className="bg-light-bg dark:bg-dark-bg rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden cursor-pointer hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow"
                   >
                     {/* Store Banner */}
-                    <div className="h-32 bg-gradient-to-r from-primary-500 to-primary-700 relative">
+                    <div className="h-32 bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] relative">
                       {store.banner ? (
                         <img src={store.banner} alt={store.name} className="w-full h-full object-cover" />
                       ) : (
@@ -148,12 +148,12 @@ export const StoresPage: React.FC = () => {
                             className="w-12 h-12 rounded-full object-cover"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                            <Store className="w-6 h-6 text-primary-600 dark:text-primary-500" />
+                          <div className="w-12 h-12 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center">
+                            <Store className="w-6 h-6 text-light-heading dark:text-dark-heading" />
                           </div>
                         )}
                         <div>
-                          <h3 className="font-bold text-gray-900 dark:text-gray-100">{store.name}</h3>
+                          <h3 className="font-bold text-light-heading dark:text-dark-heading">{store.name}</h3>
                           <span
                             className={`text-xs px-2 py-1 rounded-full ${
                               store.is_active
@@ -166,7 +166,7 @@ export const StoresPage: React.FC = () => {
                         </div>
                       </div>
                       {store.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                        <p className="text-sm text-light-secondaryText dark:text-dark-text line-clamp-2">
                           {store.description}
                         </p>
                       )}

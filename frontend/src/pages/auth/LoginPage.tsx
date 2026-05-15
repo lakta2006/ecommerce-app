@@ -7,7 +7,7 @@ import { loginSchema } from '@/utils/validations';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { Input, Button } from '@/components/ui';
 import { useToast } from '@/components/ui';
-import { Mail, Lock } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { getAuthErrorMessage } from '@/utils/authErrors';
 import type { LoginFormData } from './types';
 
@@ -68,7 +68,7 @@ export const LoginPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <Link
             to="/forgot-password"
-            className="text-sm text-primary-600 hover:underline"
+            className="text-sm text-light-link dark:text-dark-link hover:underline"
           >
             نسيت كلمة المرور؟
           </Link>
@@ -85,11 +85,11 @@ export const LoginPage: React.FC = () => {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-light-secondaryText dark:text-dark-text">
           ليس لديك حساب؟{' '}
           <Link
             to="/register"
-            className="text-primary-600 font-medium hover:underline"
+            className="text-light-link dark:text-dark-link font-medium hover:underline"
           >
             إنشاء حساب جديد
           </Link>

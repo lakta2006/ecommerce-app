@@ -83,7 +83,7 @@ export const EditProfilePage: React.FC = () => {
     return (
       <AuthLayout title="تعديل المعلومات" subtitle="يجب تسجيل الدخول أولاً">
         <div className="text-center py-8">
-          <p className="text-gray-500 dark:text-gray-400">يرجى تسجيل الدخول أولاً</p>
+          <p className="text-light-secondaryText dark:text-dark-text">يرجى تسجيل الدخول أولاً</p>
           <Button onClick={() => navigate('/login')} className="mt-4">
             تسجيل الدخول
           </Button>
@@ -106,7 +106,7 @@ export const EditProfilePage: React.FC = () => {
               className="relative cursor-pointer group mb-4"
               onClick={handleAvatarClick}
             >
-              <div className="w-24 h-24 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="w-24 h-24 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {avatarPreview ? (
                   <img
                     src={avatarPreview}
@@ -114,10 +114,10 @@ export const EditProfilePage: React.FC = () => {
                     className="w-24 h-24 rounded-full object-cover"
                   />
                 ) : (
-                  <UserIcon className="w-12 h-12 text-primary-600 dark:text-primary-400" />
+                  <UserIcon className="w-12 h-12 text-light-icon dark:text-dark-heading" />
                 )}
               </div>
-              <div className="absolute bottom-0 right-0 w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center border-2 border-white shadow-lg group-hover:bg-primary-700 transition-colors">
+              <div className="absolute bottom-0 right-0 w-8 h-8 bg-light-heading rounded-full flex items-center justify-center border-2 border-white shadow-lg group-hover:bg-light-heading transition-colors">
                 <Camera className="w-4 h-4 text-white" />
               </div>
               <div className="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200" />

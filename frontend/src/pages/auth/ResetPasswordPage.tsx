@@ -7,7 +7,6 @@ import { resetPasswordSchema } from '@/utils/validations';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { Input, Button, PasswordStrength } from '@/components/ui';
 import { useToast } from '@/components/ui';
-import { Lock } from 'lucide-react';
 import { getAuthErrorMessage } from '@/utils/authErrors';
 import type { ResetPasswordFormData } from './types';
 
@@ -185,7 +184,7 @@ export const ResetPasswordPage: React.FC = () => {
       <div className="mt-6 text-center">
         <Link
           to="/login"
-          className="text-sm text-primary-600 dark:text-primary-500 hover:underline"
+          className="text-sm text-light-link dark:text-dark-link hover:underline"
         >
           العودة لتسجيل الدخول
         </Link>

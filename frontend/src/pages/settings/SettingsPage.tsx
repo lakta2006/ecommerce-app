@@ -67,7 +67,7 @@ export const SettingsPage: React.FC = () => {
   if (!user) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-500 dark:text-gray-400">يرجى تسجيل الدخول للوصول إلى الإعدادات</p>
+        <p className="text-light-secondaryText dark:text-dark-text">يرجى تسجيل الدخول للوصول إلى الإعدادات</p>
       </div>
     );
   }
@@ -77,7 +77,7 @@ export const SettingsPage: React.FC = () => {
       {/* Profile Card */}
       <Card>
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center flex-shrink-0 overflow-hidden">
+          <div className="w-16 h-16 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center flex-shrink-0 overflow-hidden">
             {user.avatar ? (
               <img
                 src={user.avatar}
@@ -85,13 +85,13 @@ export const SettingsPage: React.FC = () => {
                 className="w-16 h-16 rounded-full object-cover"
               />
             ) : (
-              <User className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+              <User className="w-8 h-8 text-light-heading dark:text-dark-heading" />
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold truncate dark:text-gray-100">{user.name}</h3>
-            <p className="text-gray-500 dark:text-gray-400 text-sm truncate">{user.email}</p>
-            <span className="inline-block mt-1 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded">
+            <h3 className="text-lg font-semibold truncate text-light-heading dark:text-dark-heading">{user.name}</h3>
+            <p className="text-light-secondaryText dark:text-dark-text text-sm truncate">{user.email}</p>
+            <span className="inline-block mt-1 px-2 py-1 text-xs bg-light-border dark:bg-dark-border text-light-heading dark:text-dark-heading rounded">
               {user.role === 'customer' && 'مستخدم'}
               {user.role === 'store_owner' && 'صاحب متجر'}
               {user.role === 'mall_owner' && 'صاحب مول'}
@@ -103,12 +103,12 @@ export const SettingsPage: React.FC = () => {
 
       {/* Settings Menu */}
       <Card>
-        <div className="divide-y divide-gray-100 dark:divide-gray-700">
+        <div className="divide-y divide-light-border dark:divide-dark-border">
           {settingItems.map((item, index) => (
             <button
               key={index}
               onClick={item.onClick}
-              className={`w-full flex items-center gap-4 px-4 py-4 text-right transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${
+              className={`w-full flex items-center gap-4 px-4 py-4 text-right transition-colors hover:bg-light-border dark:hover:bg-dark-border ${
                 item.variant === 'danger' ? 'text-red-600 dark:text-red-400' : ''
               }`}
             >
@@ -116,7 +116,7 @@ export const SettingsPage: React.FC = () => {
                 className={`flex-shrink-0 ${
                   item.variant === 'danger'
                     ? 'text-red-600 dark:text-red-400'
-                    : 'text-gray-600 dark:text-gray-400'
+                    : 'text-light-icon dark:text-dark-heading'
                 }`}
               >
                 {item.icon}
@@ -126,13 +126,13 @@ export const SettingsPage: React.FC = () => {
                   className={`font-medium ${
                     item.variant === 'danger'
                       ? 'text-red-600 dark:text-red-400'
-                      : 'text-gray-900 dark:text-gray-100'
+                      : 'text-light-text dark:text-dark-text'
                   }`}
                 >
                   {item.title}
                 </p>
               </div>
-              <ChevronLeft className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+              <ChevronLeft className="w-5 h-5 text-light-icon dark:text-dark-heading" />
             </button>
           ))}
         </div>
@@ -157,14 +157,14 @@ export const SettingsPage: React.FC = () => {
       <div className="flex items-center justify-center gap-4 pt-2 pb-4">
         <button
           onClick={() => navigate('/terms')}
-          className="text-sm text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
+          className="text-sm text-light-secondaryText dark:text-dark-text hover:text-light-link dark:hover:text-dark-link transition-colors"
         >
           شروط الاستخدام
         </button>
-        <span className="text-gray-300 dark:text-gray-600">|</span>
+        <span className="text-light-icon dark:text-dark-heading">|</span>
         <button
           onClick={() => navigate('/privacy')}
-          className="text-sm text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
+          className="text-sm text-light-secondaryText dark:text-dark-text hover:text-light-link dark:hover:text-dark-link transition-colors"
         >
           سياسة الخصوصية
         </button>
@@ -179,17 +179,17 @@ export const SettingsPage: React.FC = () => {
             onClick={() => setShowAppearanceSheet(false)}
           />
           {/* Dialog */}
-          <div className="relative w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 animate-scale-in">
+          <div className="relative w-full max-w-sm bg-light-bg dark:bg-dark-bg rounded-2xl shadow-xl p-6 animate-scale-in">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">المظهر</h3>
+              <h3 className="text-lg font-bold text-light-heading dark:text-dark-heading">المظهر</h3>
               <button
                 onClick={() => setShowAppearanceSheet(false)}
-                className="text-sm text-gray-500 dark:text-gray-400"
+                className="text-sm text-light-secondaryText dark:text-dark-text"
               >
                 إغلاق
               </button>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">اختر المظهر التطبيق</p>
+            <p className="text-sm text-light-secondaryText dark:text-dark-text mb-4">اختر المظهر التطبيق</p>
             <div className="space-y-3">
               {[
                 { id: 'light' as ThemeMode, name: 'الوضع الفاتح', icon: <Sun className="w-5 h-5" /> },
@@ -203,28 +203,28 @@ export const SettingsPage: React.FC = () => {
                     onClick={() => handleThemeChange(option.id)}
                     className={`w-full flex items-center gap-4 p-4 rounded-lg border-2 transition-all ${
                       isSelected
-                        ? 'border-primary-600 dark:border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                        ? 'border-light-heading dark:border-dark-heading bg-light-border dark:bg-dark-border'
+                        : 'border-light-border dark:border-dark-border hover:border-light-heading dark:hover:border-dark-heading'
                     }`}
                   >
                     <div
                       className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
                         isSelected
-                          ? 'bg-primary-600 dark:bg-primary-700 text-white'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                          ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                          : 'bg-light-border dark:bg-dark-border text-light-icon dark:text-dark-heading'
                       }`}
                     >
                       {option.icon}
                     </div>
                     <div className="flex-1 text-right">
                       <p className={`font-medium ${
-                        isSelected ? 'text-primary-700 dark:text-primary-400' : 'text-gray-900 dark:text-gray-100'
+                        isSelected ? 'text-light-heading dark:text-dark-heading' : 'text-light-text dark:text-dark-text'
                       }`}>
                         {option.name}
                       </p>
                     </div>
                     {isSelected && (
-                      <div className="flex-shrink-0 text-primary-600 dark:text-primary-500">
+                      <div className="flex-shrink-0 text-light-heading dark:text-dark-heading">
                         ✓
                       </div>
                     )}
