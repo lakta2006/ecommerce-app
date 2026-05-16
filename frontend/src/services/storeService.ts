@@ -50,6 +50,12 @@ export const storeService = {
     return response.data;
   },
 
+  // Search stores
+  searchStores: async (query: string): Promise<Store[]> => {
+    const response = await apiClient.get(`/api/stores?search=${encodeURIComponent(query)}`);
+    return response.data;
+  },
+
   // Get single store by ID
   getStore: async (id: number): Promise<Store> => {
     const response = await apiClient.get(`/api/stores/${id}`);

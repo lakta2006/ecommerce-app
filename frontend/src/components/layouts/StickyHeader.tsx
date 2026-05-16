@@ -1,6 +1,14 @@
 import React from 'react';
-import { Search, X, Bell, Heart } from 'lucide-react';
+import { Search, X, Bell, Heart, ShoppingCart, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+// Custom Shopping Cart Icon with Star
+export const CartWithStarIcon: React.FC = () => (
+  <div className="relative inline-flex items-center justify-center w-7 h-7 bg-white dark:bg-dark-bg rounded-lg shadow-sm">
+    <ShoppingCart className="w-4.5 h-4.5 text-light-heading dark:text-dark-heading" />
+    <Star className="absolute -top-0 -right-0 w-2 h-2 text-sky-400 fill-sky-400" />
+  </div>
+);
 
 interface StickyHeaderProps {
   title: string;

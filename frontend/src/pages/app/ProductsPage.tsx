@@ -30,6 +30,7 @@ export const ProductsPage: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+  const [secondaryCategory, setSecondaryCategory] = useState<string | null>(null);
 
   // Fetch products from API
   useEffect(() => {
