@@ -92,9 +92,17 @@ export const ProductsPage: React.FC = () => {
       );
     }
 
-    // Filter by category - match against the Arabic category name
+    // Filter by category - support primary and secondary categories
     if (selectedCategory) {
-      result = result.filter((p) => p.category === selectedCategory);
+      if (secondaryCategory) {
+        // Filter products that match either primary or secondary category
+        result = result.filter((p) => 
+          p.category === selectedCategory || p.category === secondaryCategory
+        );
+      } else {
+        // Filter by primary category only
+        result = result.filter((p) => p.category === selectedCategory);
+      }
     }
 
     // Sort
@@ -113,7 +121,7 @@ export const ProductsPage: React.FC = () => {
     }
 
     return result;
-  }, [selectedCategory, sortBy, products, searchQuery]);
+  }, [selectedCategory, secondaryCategory, sortBy, products, searchQuery]);
 
   const handleAddToCart = (productId: number) => {
     const product = products.find((p) => p.id === productId);
@@ -183,32 +191,62 @@ export const ProductsPage: React.FC = () => {
         </div>
 
         {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          <button
-            onClick={clearCategoryFilter}
-            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-              !selectedCategory
-                ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
-                : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
-            }`}
-          >
-            الكل
-          </button>
-          {categories.map((category) => (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <button
-              key={category}
               onClick={() => {
-                navigate(`/products?category=${encodeURIComponent(category)}`);
+                clearCategoryFilter();
+                setSecondaryCategory(null);
               }}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                selectedCategory === category
+                !selectedCategory
                   ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
                   : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
               }`}
             >
-              {category}
+              الكل
             </button>
-          ))}
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => {
+                  navigate(`/products?category=${encodeURIComponent(category)}`);
+                  setSecondaryCategory(null);
+                }}
+                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                    : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
+          {/* Secondary Category Pills - Show only when a primary category is selected */}
+          {selectedCategory && (
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              <span className="text-xs text-light-secondaryText dark:text-dark-text whitespace-nowrap">إضافة تصنيف:</span>
+              {categories
+                .filter((cat) => cat !== selectedCategory)
+                .map((category) => (
+                  <button
+                    key={`secondary-${category}`}
+                    onClick={() => {
+                      setSecondaryCategory(secondaryCategory === category ? null : category);
+                    }}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                      secondaryCategory === category
+                        ? 'bg-gradient-to-r from-[#6EE7E7] to-[#A78BFA] text-white'
+                        : 'bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:bg-light-border dark:hover:bg-dark-border'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+            </div>
+          )}
         </div>
 
         {/* Products Grid */}
